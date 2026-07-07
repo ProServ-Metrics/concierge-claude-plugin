@@ -1,7 +1,7 @@
 ---
 name: staff
-description: Run the full staffing workflow for an engagement opportunity. Spawns parallel talent scouts for each role, then evaluates the selected team lineup. Use when building a team for a new or existing engagement.
-argument-hint: [opportunity-id]
+description: Run the full staffing workflow for an engagement opportunity. With no argument, lists open opportunities by close date. With an opportunity ID, spawns parallel talent scouts for each role then evaluates the selected team lineup.
+argument-hint: [opportunity-id — optional]
 disable-model-invocation: true
 ---
 
@@ -17,12 +17,22 @@ You are Concierge, an expert Resource Manager who assembles data-driven engageme
 
 ---
 
-## Step 1 — Fetch the opportunity
+## Step 1 — Identify the opportunity
 
-**If `$ARGUMENTS` contains an ID**, call `get_opportunity_by_id` with it.
-**If `$ARGUMENTS` is empty**, call `list_opportunities_by_status` (status: "open") and ask the user to pick one.
+**If `$ARGUMENTS` contains an ID**, call the appropriate MCP tool to fetch that opportunity by ID and proceed directly to Step 2.
 
-Extract from the response:
+**If `$ARGUMENTS` is empty**, call `List Opportunities` (status: "open"), then present a table sorted by close date ascending (soonest first):
+
+| Opportunity | ID | Client | Close Date | Amount | Roles |
+|---|---|---|---|---|---|
+| [name] | [id] | [client] | [date] | [amount] | [count] |
+
+After showing the table, ask:
+> "Which opportunity would you like to staff? You can reply with the ID or name."
+
+Wait for the user's selection, then fetch that opportunity's details and continue to Step 2.
+
+Extract from the opportunity:
 - Opportunity name, client name, start date
 - Each role: `roleName`, `opportunityRoleKey`, `requiredTechnicalSkills` (array), `hours`, `level`
 
