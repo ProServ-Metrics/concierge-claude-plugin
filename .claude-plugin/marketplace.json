@@ -13,7 +13,7 @@
       "author": {
         "name": "PSMetrics"
       },
-      "repository": "https://github.com/Chris-Johnson-PSMetrics/concierge-claude-plugin",
+      "repository": "https://github.com/ProServ-Metrics/concierge-claude-plugin",
       "keywords": ["staffing", "hr", "resource-management", "consulting", "mcp"],
       "category": "productivity"
     }
