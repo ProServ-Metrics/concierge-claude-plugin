@@ -1,6 +1,6 @@
 {
   "$schema": "https://schemas.claude.ai/plugin-marketplace/v1",
-  "name": "concierge",
+  "name": "concierge-demo",
   "description": "AI-powered staffing and resource management for Claude Code",
   "owner": {
     "name": "PSMetrics"
