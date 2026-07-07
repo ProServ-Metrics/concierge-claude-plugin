@@ -1,0 +1,109 @@
+---
+description: Build an internal game plan for an opportunity — team assessment, risks and mitigations, project timeline, and engagement safety net.
+argument-hint: opportunity ID (e.g. OPP-2025-042)
+---
+
+# Build Internal Game Plan
+
+Build an internal-use game plan for opportunity **$ARGUMENTS**. This document is for the delivery team and leadership — be candid about risks and gaps.
+
+## Data gathering — run these MCP calls in parallel
+
+1. **Get Opportunity Details** — full opportunity: client, description, roles, required skills, proposed dates.
+2. **Get Client Details** — client history, past engagements, any CSAT or notes.
+3. **List Engagements By Status** (completed + active) — for safety net analysis.
+4. **List Employees With Matching Technical Skills** — all employees with the required skills, for backup roster.
+5. **Get All Employees DIR Scores** — for ranking backup candidates.
+
+Then for each proposed role assignment:
+- **Get Employee Information**
+- **Get Employee Technical Skills**
+- **Get Employee Engagement Role Assignments**
+- **Get Employee DIR Score**
+- **Get Employees Availability for Period** (for the engagement dates)
+
+## Analysis before writing
+
+**Strengths**: What does this team do exceptionally well? Look for certifications, direct client experience, industry experience, and proven delivery of similar work.
+
+**Risks**: Be honest. Consider:
+- Any role where the assigned employee lacks direct experience with this engagement type
+- Any role where the assigned employee has no prior history with this client or industry
+- Availability gaps or potential conflicts during the engagement period
+- Technical skill gaps — required skill exists on the team but no one is certified or deep in it
+- DISC/soft-skill gaps — e.g. all high-D, no one to manage client expectations carefully
+- Single points of failure — if one person leaves, does the engagement stall?
+
+**Mitigations**: For each identified risk, propose a concrete mitigation (e.g. pair with an experienced mentor, plan a client intro call early, pre-identify a backup resource).
+
+**Safety net**: From the broader employee pool:
+- Find completed engagements that are similar (by type, required skills, client, industry) — these are reference engagements we can draw on
+- For each required role, rank the top 3–5 backup employees by DIR score who have the required skills but are NOT the primary assigned resource
+
+## Document structure
+
+Internal tone. Be direct. Use bullet points heavily.
+
+---
+
+### Opportunity Overview
+
+- Client, industry, engagement type
+- Proposed dates and duration
+- Roles required and who is assigned to each
+- Key required skills and certifications
+
+---
+
+### Team Assessment
+
+For each role:
+
+**[Role Title] — [Employee Name]** (DIR Score: X)
+- *Strengths for this engagement*: relevant certs, skills, prior similar work, client/industry history
+- *Watch areas*: gaps in experience, any flags from prior engagements
+- *Availability*: confirmed available for full engagement period? (Y/N, note any conflicts)
+
+#### Team Dynamics Summary
+- Combined DISC profile overview and what it means for this engagement
+- Complementary strengths across the team
+- Any soft-skill gaps to actively manage
+
+---
+
+### Risks & Mitigations
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+| [risk] | High/Med/Low | High/Med/Low | [concrete action] |
+
+Include at least one row per identified risk from the analysis above.
+
+---
+
+### High-Level Project Timeline
+
+Phase-by-phase timeline based on the proposed engagement dates. For each phase:
+- Phase name and duration
+- Key deliverables
+- Who leads (which role)
+- Key dependencies or risks in this phase
+
+---
+
+### Engagement Safety Net
+
+#### Similar Reference Engagements
+Engagements we can draw on for playbooks, lessons learned, and escalation paths. For each:
+- Engagement name/type and client (or industry if confidential)
+- Why it's relevant (type, skills, industry match)
+- Project Manager and key role assignments
+
+#### Backup Roster by Role
+For each required role, the top 3–5 employees (not already assigned) ranked by DIR score who have the required skills:
+
+**[Role Title]**
+| Rank | Employee | DIR Score | Key Relevant Skills/Certs | Relevant Prior Engagements |
+|------|----------|-----------|--------------------------|---------------------------|
+
+Flag anyone who has previously worked with this specific client with a ⭐.
