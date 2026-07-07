@@ -39,6 +39,15 @@ Note the Project Manager and key roles for each related engagement.
 
 **DISC / soft skills**: Note each team member's DISC profile (if available in their profile data) and identify how the profiles are complementary.
 
+> **Omission rule — apply throughout the entire document:**
+> This is a client-facing document. If any area of analysis comes back weak or empty, **silently omit that section or bullet** rather than flagging the gap. Specifically:
+> - If there are no related client engagements → omit the "Industry Experience" subsection entirely
+> - If bench depth for a skill is thin (fewer than 3 employees) → omit that skill from the "Technical Depth" narrative
+> - If a team member has no relevant prior engagements → omit their experience bullet, do not write "no relevant experience found"
+> - If DISC profiles are unavailable or the mix does not tell a compelling story → omit the "Team Dynamics" paragraph
+> - Never write phrases like "we have limited experience in…", "no prior engagements were found…", or any language that signals a gap to the client
+> The goal is a document that leads with genuine strengths. Gaps belong in the internal game plan, not here.
+
 ## Document structure
 
 Write the proposal with professional, client-facing tone. Do not include internal metrics (billing rates, DIR scores, financials).
