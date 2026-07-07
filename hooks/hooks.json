@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "mcp__Consultants__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -e '.is_error == true' > /dev/null 2>&1 && echo 'CONCIERGE_MCP_ERROR: The Consultants MCP server returned an error. If the server is not running, start it with: cd moneyball-services && dotnet run --project MCP/Concierge.Services.MCP.csproj' || true"
+          }
+        ]
+      }
+    ]
+  }
+}
