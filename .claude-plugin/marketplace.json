@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.claude.ai/plugin-marketplace/v1",
+  "name": "concierge",
+  "description": "AI-powered staffing and resource management for Claude Code",
+  "owner": {
+    "name": "PSMetrics"
+  },
+  "plugins": [
+    {
+      "name": "concierge",
+      "source": "./",
+      "description": "Find candidates, staff engagements, evaluate team lineups, and review the pipeline — powered by the Concierge MCP server",
+      "author": {
+        "name": "PSMetrics"
+      },
+      "repository": "https://github.com/Chris-Johnson-PSMetrics/concierge-claude-plugin",
+      "keywords": ["staffing", "hr", "resource-management", "consulting", "mcp"],
+      "category": "productivity"
+    }
+  ]
+}
