@@ -48,6 +48,10 @@ Note the Project Manager and key roles for each related engagement.
 > - Never write phrases like "we have limited experience in…", "no prior engagements were found…", or any language that signals a gap to the client
 > The goal is a document that leads with genuine strengths. Gaps belong in the internal game plan, not here.
 
+> **Client name sanitization — apply throughout the entire document:**
+> Do not reference any specific client names from prior engagements anywhere in the proposal. Replace all client names with their industry or engagement type only (e.g. "a regional healthcare system", "a Fortune 500 financial services firm", "a state government agency"). At the end of the Experience & Qualifications section, add a single line:
+> *"Specific client references are available upon request."*
+
 ## Document structure
 
 Write the proposal with professional, client-facing tone. Do not include internal metrics (billing rates, DIR scores, financials).
