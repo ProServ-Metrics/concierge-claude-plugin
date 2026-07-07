@@ -1,7 +1,29 @@
 ---
-description: Generate a full-page HTML consultant profile artifact with tabbed navigation — matching the Concierge web app modal. Renders inline in the Claude artifacts panel.
+description: Generate a full-page HTML consultant profile with tabbed navigation — rendered as a Claude artifact. Calls the Concierge MCP server to generate the HTML server-side (no token-heavy generation by Claude).
 argument-hint: employee name or ID
 ---
+
+# Consultant Profile
+
+Generate a complete HTML consultant profile for **$ARGUMENTS**.
+
+## Step 1 — Resolve the employee ID
+
+If `$ARGUMENTS` looks like an employee ID (e.g. `EMP0042`), use it directly.
+
+Otherwise call **Search Employees by Name** to find the employee. If multiple results are returned, ask the user to clarify before continuing.
+
+## Step 2 — Generate the profile
+
+Call **Build Consultant Profile HTML** with the resolved employee ID.
+
+The tool fetches all data server-side (profile, skills, DIR score, engagements, DISC, strengths) and returns a complete, self-contained HTML document.
+
+## Step 3 — Render as artifact
+
+Output the returned HTML string inside a fenced `html` code block so Claude Desktop renders it as an artifact.
+
+Then write one sentence confirming who the profile is for.
 
 # Consultant Profile
 
