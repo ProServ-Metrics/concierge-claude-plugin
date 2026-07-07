@@ -2,7 +2,7 @@
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "mcp__Consultants__.*",
+        "matcher": "mcp__Concierge_by_ProServe_Metrics__.*",
         "hooks": [
           {
             "type": "command",

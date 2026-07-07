@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "Consultants": {
+    "Concierge by ProServe Metrics": {
       "type": "http",
       "url": "https://apim-vweiohny77mk2.azure-api.net/mcp"
     }
