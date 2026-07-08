@@ -19,9 +19,16 @@ Call **Build Consultant Profile HTML** with the resolved employee ID.
 
 The tool fetches all data server-side (profile, skills, DIR score, engagements, DISC, strengths) and returns a complete, self-contained HTML document.
 
-## Step 3 — Render as artifact
+## Step 3 — Render as a visual artifact
 
-Output the returned HTML string inside a fenced `html` code block so Claude Desktop renders it as an artifact.
+From the HTML string returned by the tool:
+1. Strip the outer `<!DOCTYPE html>`, `<html>`, `<head>`, and `<body>` wrapper tags, keeping the `<style>` block and all inner content intact.
+2. Call `mcp__visualize__show_widget` with:
+   - `widget_code`: the stripped HTML fragment
+   - `title`: `[EmployeeFirstName]_[EmployeeLastName]_profile`
+   - `loading_messages`: `["Loading profile…", "Fetching data…"]`
+
+Do **not** output the HTML as a fenced code block — call the visualize tool so it renders as an interactive card.
 
 Then write one sentence confirming who the profile is for.
 
