@@ -1,13 +1,121 @@
 ---
 name: evaluate-lineup
-description: Run a comprehensive 6-dimension evaluation of a proposed engagement team — technical synergy, team chemistry, financial impact, skills coverage, team experience, and risk. Spawns all six evaluator agents in parallel.
+description: Run a comprehensive 7-dimension evaluation of a proposed engagement team. Spawns 6 specialist evaluators in parallel, then synthesizes their structured outputs into an Executive Summary + full dimension report.
 argument-hint: [opportunity-id] or describe the lineup
 when_to_use: evaluate this team, how strong is this lineup, assess my team, rate these candidates
 ---
 
 # Evaluate Lineup
 
-Run a full parallel evaluation of a proposed engagement team.
+Orchestrate a full parallel evaluation of a proposed engagement team.
+
+## Step 1 — Gather the lineup
+
+Parse `$ARGUMENTS`. You need:
+- Opportunity name/ID and client name
+- Role assignments: each role → employee name or ID
+
+If you only have names, call **Search Employees by Name** to resolve IDs first.
+
+## Step 2 — Fetch all employee data in one batch
+
+Call **Get Employees** with all employee IDs and fields `Basic,Organization,TechnicalSkills,Strengths,DISC,ActiveEngagementRoleAssignments`.
+
+Also call **Get Opportunity Details** if you have an opportunity ID (for required skills and start/end dates).
+
+## Step 3 — Spawn all 6 dimension evaluators in parallel (ALL IN ONE RESPONSE)
+
+Call the Task tool **6 times in the same response**. Each agent receives the full team data from Step 2. Each agent returns **structured JSON** (not markdown).
+
+| # | Agent | Returns |
+|---|-------|---------|
+| 1 | `concierge:evaluator-technical-synergy` | `{teamStatus, capabilitiesCovered, criticalGaps, singlePointsOfFailure, ...}` |
+| 2 | `concierge:evaluator-team-chemistry` | `{teamChemistryScore, collaborationNetworkScore, pairDetails, discTeamDynamics, ...}` |
+| 3 | `concierge:evaluator-financial-impact` | `{totalRevenue, totalCost, overallMargin, individualMargins, ...}` |
+| 4 | `concierge:evaluator-skills-coverage` | `{teamTechnicalCoverageScore, teamSynergyScore, backstopDetails, mentoringOpportunities, ...}` |
+| 5 | `concierge:evaluator-team-experience` | `{teamExperienceScore, teamMembers[{roleExperience, tenure, versatility, industry, client}], ...}` |
+| 6 | `concierge:evaluator-risk` | `{overallRiskLevel, risksByCategory, topRisks}` |
+
+**Prompt for each agent:**
+```
+EVALUATION BRIEF
+Opportunity: [name] (ID: [id])
+Client: [clientName]
+Start date: [startDate]
+
+TEAM LINEUP
+[For each role:]
+- [Role]: [Employee Name] (ID: [employeeId])
+  Skills: [top 5 skills with scores and technicalSkillKey]
+  DISC: D:[d] I:[i] S:[s] C:[c]
+  Strengths: [top 5 in rank order]
+  Active engagements: [list or "None"]
+  Engagement history: [engagement names, clients, dates]
+
+Required skills for opportunity: [list from opportunity roles, include technicalSkillKey]
+
+Return your analysis as structured JSON per your output schema.
+```
+
+Tell the user: > "Running 6-dimension evaluation in parallel. Synthesizing results shortly."
+
+## Step 4 — Spawn the Executive Summary evaluator
+
+Once all 6 dimension agents return their JSON, pass ALL of their outputs to `concierge:evaluator-executive-summary` in a single Task call:
+
+```
+EXECUTIVE SUMMARY BRIEF
+Opportunity: [name] · Client: [clientName]
+Team: [list roles + names]
+
+DIMENSION OUTPUTS:
+[technical-synergy JSON]
+[team-chemistry JSON]
+[financial-impact JSON]
+[skills-coverage JSON]
+[team-experience JSON]
+[risk JSON]
+
+Synthesize using the 8-step methodology. Return structured Markdown.
+```
+
+## Step 5 — Assemble and present the final report
+
+Combine the Executive Summary markdown with 6 rendered dimension sections into one document:
+
+````markdown
+# Lineup Evaluation: [Opportunity Name]
+**Client**: [Client] · **Start**: [Date] · **Evaluated**: [today]
+
+---
+
+[EXECUTIVE SUMMARY section from evaluator-executive-summary]
+
+---
+
+## Dimension Details
+
+### 1. Technical Synergy
+[Render capabilitiesCovered, criticalGaps, SPOFs as tables from JSON]
+
+### 2. Team Chemistry
+[Render pairDetails, DISC dynamics, StrengthsFinder coverage from JSON]
+
+### 3. Financial Impact
+[Render margin table from JSON]
+
+### 4. Skills Coverage
+[Render synergy %, backstop pairs, mentoring opportunities from JSON]
+
+### 5. Team Experience
+[Render 5-dimension table per member from JSON]
+
+### 6. Risk Assessment
+[Render risk register grouped by category, top risks from JSON]
+````
+
+Present the complete assembled document to the user, then ask:
+> "Would you like this in a different format — Word-style document, HTML rendered card, or PDF-ready layout?"
 
 ## Step 1 — Gather the lineup
 

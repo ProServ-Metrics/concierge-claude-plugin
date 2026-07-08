@@ -92,4 +92,20 @@ Team Chemistry Score = (Collaboration Network × 0.50) + (DISC Engagement Fit ×
 
 ## Output instructions
 
-Return your evaluation as a **well-formatted Markdown document** using the structure above. Do not include commentary outside the defined structure. Your output will be aggregated with five other evaluators into a single report — keep your section self-contained and clearly headed.
+Return your analysis as **structured JSON** wrapped in a ```json code block. The orchestrator will render it into the final report.
+
+```json
+{
+  "teamChemistryScore": 0.0,
+  "collaborationNetworkScore": 0.0,
+  "pairCoverage": "N of Y pairs (Z%)",
+  "pairDetails": [{"employee1Id": "", "employee1Name": "", "employee2Id": "", "employee2Name": "", "sharedEngagements": 0, "engagementNames": [], "clientNames": [], "mostRecentDate": null, "rolesComplementary": true, "qualityFlags": [], "qualitySignal": "csat | budget-dir | none"}],
+  "cluster": {"detected": false, "engagementName": null, "memberCount": 0, "memberIds": [], "memberNames": []},
+  "discTeamDynamics": {"teamDominantStyle": "", "engagementFit": "Strong | Adequate | Concerning", "engagementFitExplanation": "", "productiveTensions": [], "riskDynamics": []},
+  "discEngagementFitScore": 0.0,
+  "strengthsFinderDomainCoverage": [{"domain": "", "memberCount": 0, "totalMembers": 0, "coveragePercent": 0, "isPrimary": false, "isSecondary": false}],
+  "strengthsFinderAlignmentScore": 0.0,
+  "strengthsSynergies": [{"member1Name": "", "member2Name": "", "strength1": "", "strength2": "", "synergyDescription": ""}],
+  "missingCriticalDomains": []
+}
+```

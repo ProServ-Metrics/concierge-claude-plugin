@@ -59,4 +59,12 @@ Be specific and evidence-based. Reference actual employee names, skill scores, a
 
 ## Output instructions
 
-Return your evaluation as a **well-formatted Markdown document** using the structure above. Do not include commentary outside the defined structure. Your output will be aggregated with five other evaluators into a single report — keep your section self-contained and clearly headed.
+Return your analysis as **structured JSON** wrapped in a ```json code block. The orchestrator will render it into the final report.
+
+```json
+{
+  "overallRiskLevel": "low | medium | high | critical",
+  "risksByCategory": [{"category": "technical | collaboration | experience | resource | financial | client | dependency", "risks": [{"description": "", "likelihood": "low | medium | high", "impact": "low | medium | high", "mitigation": ""}]}],
+  "topRisks": [{"description": "", "category": "", "severity": "low | medium | high | critical"}]
+}
+```

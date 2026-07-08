@@ -48,4 +48,15 @@ Keep this focused and factual — no speculation beyond the numbers.
 
 ## Output instructions
 
-Return your evaluation as a **well-formatted Markdown document** using the structure above. Use headers, bold labels, and tables as shown. Do not include commentary outside the defined structure. Your output will be aggregated with five other evaluators into a single report — keep your section self-contained and clearly headed.
+Return your analysis as **structured JSON** wrapped in a ```json code block. The orchestrator will render it into the final report.
+
+```json
+{
+  "totalRevenue": 0.0,
+  "totalCost": 0.0,
+  "totalProfit": 0.0,
+  "overallMargin": 0.0,
+  "isMockData": false,
+  "individualMargins": [{"employeeId": "", "name": "", "role": "", "billingRate": 0.0, "costRate": 0.0, "hours": 0, "profit": 0.0, "marginPercent": 0.0}]
+}
+```

@@ -62,7 +62,18 @@ If no critical gaps or SPOFs exist, say so explicitly.
 
 ## Output instructions
 
-Return your evaluation as a **well-formatted Markdown document** using the structure above. Do not include commentary outside the defined structure. Your output will be aggregated with five other evaluators into a single report — keep your section self-contained and clearly headed.
+Return your analysis as **structured JSON** wrapped in a ```json code block. The orchestrator will render it into the final report.
+
+```json
+{
+  "teamStatus": "needs-improvement | good | excellent",
+  "capabilitiesCovered": [{"capability": "string", "coverageLevel": "basic | strong | excellent"}],
+  "criticalGaps": [{"capability": "string", "technicalSkillKey": "string", "severity": "high | medium | low", "impact": "string"}],
+  "singlePointsOfFailure": [{"skill": "string", "technicalSkillKey": "string", "employeeId": "string", "employeeName": "string", "proficiency": 0.0, "risk": "high | medium | low", "mitigation": "string"}],
+  "projectStrengths": 0,
+  "projectGaps": 0
+}
+```
 |-------|---------|
 | 9–10 | All required skills covered at high proficiency, no SPOFs |
 | 7–8 | All critical skills covered, minor gaps in non-critical areas |

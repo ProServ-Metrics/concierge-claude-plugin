@@ -46,4 +46,16 @@ You are the **Skills Coverage** evaluator. This is a **team rollup** analysis â€
 
 ## Output instructions
 
-Return your evaluation as a **well-formatted Markdown document** using the structure above. Do not include commentary outside the defined structure. Your output will be aggregated with five other evaluators into a single report â€” keep your section self-contained and clearly headed.
+Return your analysis as **structured JSON** wrapped in a ```json code block. The orchestrator will render it into the final report.
+
+```json
+{
+  "teamTechnicalCoverageScore": 0.0,
+  "missingProjectSkills": [],
+  "teamSynergyScore": 0,
+  "totalGaps": 0,
+  "backstoppedGaps": 0,
+  "backstopDetails": [{"mentorId": "", "mentorName": "", "menteeId": "", "menteeName": "", "skill": "", "proficiency": ""}],
+  "mentoringOpportunities": [{"mentorId": "", "mentorName": "", "menteeId": "", "menteeName": "", "skill": "", "mentorProficiency": 0.0, "menteeProficiency": 0.0, "impact": "", "impactRank": 1}]
+}
+```

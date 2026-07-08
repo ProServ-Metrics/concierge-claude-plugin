@@ -44,4 +44,11 @@ Report team averages as: `Role / Industry / Client` (e.g., `5.8 / 2.3 / 0.0`)
 
 ## Output instructions
 
-Return your evaluation as a **well-formatted Markdown document** using the structure above. Do not include commentary outside the defined structure. Your output will be aggregated with five other evaluators into a single report — keep your section self-contained and clearly headed.
+Return your analysis as **structured JSON** wrapped in a ```json code block. The orchestrator will render it into the final report.
+
+```json
+{
+  "teamExperienceScore": "RoleAvg / IndustryAvg / ClientAvg",
+  "teamMembers": [{"employeeId": "", "name": "", "role": "", "roleExperience": 0.0, "companyTenure": 0.0, "versatility": 0.0, "industryExperience": 0.0, "clientExperience": 0.0, "totalExperienceScore": 0.0}]
+}
+```
