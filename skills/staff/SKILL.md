@@ -2,7 +2,6 @@
 name: staff
 description: Run the full staffing workflow for an engagement opportunity. With no argument, lists open opportunities by close date. With an opportunity ID, spawns parallel talent scouts for each role then evaluates the selected team lineup.
 argument-hint: [opportunity-id — optional]
-disable-model-invocation: true
 ---
 
 # Concierge Staffing Workflow
