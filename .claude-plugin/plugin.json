@@ -1,7 +1,7 @@
 {
   "name": "concierge",
   "description": "AI-powered staffing and resource management for Concierge engagements. Staff opportunities with parallel talent scouts, evaluate team lineups, and analyze the pipeline.",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "author": {
     "name": "Moneyball"
   }
