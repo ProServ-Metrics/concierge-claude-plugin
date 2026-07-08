@@ -79,9 +79,18 @@ DIMENSION OUTPUTS:
 Synthesize using the 8-step methodology. Return structured Markdown.
 ```
 
-## Step 5 — Assemble and present the final report
+## Step 5 — Assemble and present the complete evaluation record
 
-Combine the Executive Summary markdown with 6 rendered dimension sections into one document:
+Combine the Executive Summary markdown with 6 fully rendered dimension sections into one document. **This is a complete evaluation record, not an executive digest — render every field from every evaluator's JSON output. Do not summarize, collapse, or drop items.**
+
+Specifically required:
+
+- **Executive Summary**: include the full Mitigation Action Plan table (all rows, all columns: risk / action / owner / timing / success indicator), the full Alternative Considerations section, and the red/yellow/green flag breakdown as separate lists — not collapsed into bullets.
+- **Risk dimension**: render ALL `risksByCategory` entries (not just `topRisks`), each with description, likelihood, impact, and mitigation.
+- **Team Chemistry dimension**: include the full `productiveTensions[]` and `riskDynamics[]` bullet lists, the complete `strengthsFinderDomainCoverage[]` table (all four domains with coverage %, isPrimary, isSecondary), and all `strengthsSynergies[]` entries.
+- **Skills Coverage dimension**: include the full `mentoringOpportunities[]` list (all 3, with skill, proficiency scores, impactRank, and impact description) and all named `backstopDetails[]` pairs.
+- **Team Experience dimension**: include all 5 dimension scores per member in the table (role, tenure, versatility, industry, client).
+- **Financial dimension**: include the `isMockData` flag prominently if true (⚠ banner).
 
 ````markdown
 # Lineup Evaluation: [Opportunity Name]
@@ -89,32 +98,35 @@ Combine the Executive Summary markdown with 6 rendered dimension sections into o
 
 ---
 
-[EXECUTIVE SUMMARY section from evaluator-executive-summary]
+[EXECUTIVE SUMMARY section — including full Mitigation Action Plan table, Alternative Considerations, and flagged risk signals]
 
 ---
 
 ## Dimension Details
 
 ### 1. Technical Synergy
-[Render capabilitiesCovered, criticalGaps, SPOFs as tables from JSON]
+[capabilitiesCovered table · criticalGaps table · singlePointsOfFailure table · team strengths]
 
 ### 2. Team Chemistry
-[Render pairDetails, DISC dynamics, StrengthsFinder coverage from JSON]
+[Collaboration pair detail table · DISC dynamics with productiveTensions + riskDynamics bullets · StrengthsFinder domain coverage table · strengths synergies]
 
 ### 3. Financial Impact
-[Render margin table from JSON]
+[Per-member margin table · ⚠ mock data flag if isMockData=true]
 
 ### 4. Skills Coverage
-[Render synergy %, backstop pairs, mentoring opportunities from JSON]
+[Team synergy % · missing project skills · backstop pairs table · full mentoring opportunities table with impactRank]
 
 ### 5. Team Experience
-[Render 5-dimension table per member from JSON]
+[5-dimension table per member: role / tenure / versatility / industry / client · standouts · gaps]
 
 ### 6. Risk Assessment
-[Render risk register grouped by category, top risks from JSON]
+[Full risksByCategory grouped tables (all 7 categories) · top risks summary]
+
+---
+*Prepared by Concierge Staffing · ProServe Metrics*
 ````
 
-Present the complete assembled document to the user, then ask:
+After presenting the complete document, ask:
 > "Would you like this in a different format — Word-style document, HTML rendered card, or PDF-ready layout?"
 
 ## Step 1 — Gather the lineup
