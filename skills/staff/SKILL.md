@@ -154,3 +154,19 @@ Present the evaluator's output cleanly. Offer to explore any dimension in more d
 2. Do not proceed past Step 2 until all scouts have reported back
 3. Never use invented employee IDs — always use IDs from scout output
 4. Never skip lineup selection (Step 4) — always wait for the user
+
+---
+
+## Step 5 — Evaluate the lineup (FINAL STEP)
+
+Once the user has confirmed their lineup selections, invoke the `/concierge:evaluate-lineup` skill as the final step. Pass the following as arguments:
+
+- Opportunity name, ID, and client
+- The confirmed role assignments: each role → employee name + employee ID
+
+Tell the user:
+> "Great — I'll run a full evaluation of your lineup now."
+
+Then invoke `/concierge:evaluate-lineup` with the full lineup context. The evaluation will run six parallel assessments (technical synergy, team chemistry, financial impact, skills coverage, team experience, and risk) and return a complete markdown report.
+
+**RULE**: Do not skip this step — lineup evaluation is always the final gate of the staffing workflow.
