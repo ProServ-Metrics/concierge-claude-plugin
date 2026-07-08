@@ -42,3 +42,9 @@ Score 0–10 based on:
 2. **[Junior] ← [Senior]**: [Specific skill]. [Impact]
 3. **[Junior] ← [Senior]**: [Specific skill]. [Impact]
 ```
+
+---
+
+## Output instructions
+
+Return your evaluation as a **well-formatted Markdown document** using the structure above. Use headers, bold labels, and tables as shown. Do not include commentary outside the defined structure. Your output will be aggregated with five other evaluators into a single report — keep your section self-contained and clearly headed.

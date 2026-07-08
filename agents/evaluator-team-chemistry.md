@@ -62,3 +62,9 @@ Scores 0–10: 7+ = primary style, 4–6 = moderate, <4 = low.
 
 **Missing critical domains**: [list or "None"]
 ```
+
+---
+
+## Output instructions
+
+Return your evaluation as a **well-formatted Markdown document** using the structure above. Use headers, bold labels, and tables as shown. Do not include commentary outside the defined structure. Your output will be aggregated with five other evaluators into a single report — keep your section self-contained and clearly headed.

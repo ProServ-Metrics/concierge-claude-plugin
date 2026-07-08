@@ -60,31 +60,35 @@ Run your specialized evaluation and return your structured output.
 Tell the user:
 > "Running 6-dimension evaluation. This will take a moment."
 
-## Step 4 — Aggregate and present results
+## Step 4 — Aggregate and present
 
-Once all 6 return, synthesize into a final report:
+Once all 6 evaluator agents have returned their Markdown sections, assemble them into a single well-formatted Markdown report:
 
-```
-## LINEUP EVALUATION: [Opportunity Name]
-Client: [Client] · Start: [Date]
+```markdown
+# Lineup Evaluation: [Opportunity Name]
+**Client**: [Client] · **Start**: [Date] · **Evaluated**: [today's date]
 
-─────────────────────────────────────────
-### Scorecard
+---
+
+## Scorecard
 | Dimension | Score |
 |-----------|-------|
 | Technical Synergy | [X]/10 |
 | Team Chemistry | [X]/10 |
-| Financial Impact | [margin]% |
+| Financial Impact | [margin]% margin |
 | Skills Coverage | [X]/10 |
 | Team Experience | [X]/10 |
-| Risk | [Low/Medium/High/Critical] |
+| Risk | [Low / Medium / High / Critical] |
 
-**Overall: [X]/10**
+**Overall Recommendation**: [1–2 sentences: go / go-with-conditions / do-not-go and why]
 
-─────────────────────────────────────────
-[Paste each evaluator's full output, separated by headers]
-─────────────────────────────────────────
+---
+
+[Paste each agent's full Markdown output here, in the order above, separated by `---`]
 ```
 
-Offer to drill into any dimension or swap a team member.
+Present the complete assembled Markdown to the user.
+
+Then ask:
+> "Would you like this report in a different format? I can produce it as a **Word-style document**, **HTML** (viewable as a rendered card), **PDF-ready layout**, or keep it as Markdown. Just let me know."
 
