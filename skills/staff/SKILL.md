@@ -62,8 +62,9 @@ You have a fleet of specialized agents at your disposal, consisting of:
 1. Select opportunity
 2. Fetch roles & requirements
 3. Scout for candidates
-4. Review candidates & select lineup
-5. Evaluate lineup
+4. Review consolidated summary
+5. Select lineup
+6. Evaluate lineup
 ```
 
 As each step completes, call `TodoWrite` again to mark that task `completed` and set the next task to `in_progress`.
@@ -167,9 +168,33 @@ Call `TodoWrite`: mark task 2 as `completed`, task 3 as `in_progress`.
 
 ---
 
-## Step 3 — Present candidates using AskUserQuestion
+## Step 3 — Present consolidated summary
 
-Once all scouts return, for **each role** call the `AskUserQuestion` tool once. Present candidates as numbered options plus a "Find more candidates" choice:
+Once all scouts return, present all candidate results together in a **single response** before asking for any selections.
+
+For each role, render a summary table:
+
+```
+### [Role Name]
+| Candidate | Level | Skill Fit (Breadth / Depth) | Availability Risk | Notes |
+|-----------|-------|-----------------------------|-------------------|-------|
+| [Name]    | [e.g. Senior] | [X]/10 / [X]/10   | 🟢 Low / 🟡 Medium / 🔴 High | [key strength or concern] |
+```
+
+Present all role tables in one response. Then:
+
+- **Flag cross-role conflicts**: if the same candidate appears as a finalist for more than one role, call it out explicitly — e.g. *"Note: Alice Chen is a top candidate for both Lead Architect and Senior Developer. Selecting her for one role removes her from the other."*
+- Close with a brief prompt: *"Take a look at the candidates above. Let me know if you'd like more options for any role, then I'll walk you through selections one role at a time."*
+
+Wait for the user to acknowledge or request changes before moving to Step 4.
+
+Call `TodoWrite`: mark task 3 as `in_progress` (leave it in_progress until all selections are collected).
+
+---
+
+## Step 4 — Select candidates per role using AskUserQuestion
+
+Only after the consolidated summary has been shown and the user is ready, ask one role at a time via `AskUserQuestion`:
 
 ```
 Which candidate would you like for [Role Name]?
@@ -180,15 +205,15 @@ Which candidate would you like for [Role Name]?
 4. 🔍 Find more candidates for this role
 ```
 
-Ask one role at a time. Wait for the user's response before asking about the next role.
+Wait for the user's response before asking about the next role.
 
-If the user selects "Find more candidates" (option 4), spawn another `concierge:talent-scout` Task for that role and ask again when it returns.
+If the user selects "Find more candidates" (option 4), spawn another `concierge:talent-scout` Task for that role and present an updated table row before asking again.
 
-Call `TodoWrite`: mark task 3 as `completed`, task 4 as `in_progress`.
+Call `TodoWrite`: mark task 3 as `completed`, task 4 as `in_progress` once all roles are selected.
 
 ---
 
-## Step 4 — Collect the lineup
+## Step 5 — Collect the lineup
 
 Record each role → candidate name + employee ID (from the scout output).
 
@@ -196,7 +221,7 @@ Call `TodoWrite`: mark task 4 as `completed`, task 5 as `in_progress`.
 
 ---
 
-## Step 5 — Evaluate the lineup
+## Step 6 — Evaluate the lineup
 
 Invoke the `/concierge:evaluate-lineup` skill. Pass:
 - Opportunity name, ID, and client
