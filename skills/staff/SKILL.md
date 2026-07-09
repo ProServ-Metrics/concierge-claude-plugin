@@ -124,7 +124,37 @@ Hours: [hours]
 Start: [startDate]
 
 SCOUTING STRATEGY: Default (Balanced)
-[Paste the full content of prompts/agents/strategies/default.md here]
+# Default Talent Scouting Strategy
+
+## Strategy Approach
+
+You are using a **balanced, comprehensive approach** that finds the optimal overall fit across multiple dimensions. You are NOT optimizing for any single factor (speed, technical depth, or cost) but rather the best combined match.
+
+## Ranking Weights
+
+Apply the following weights when calculating composite candidate scores:
+
+1. **Technical match score** (40%) - Fuzzy match confidence across all required skills
+2. **Availability score** (30%) - Percentage of role window free from conflicts  
+3. **Experience fit** (20%) - Appropriateness of level and past project complexity
+4. **Strategic fit** (10%) - Client history, team dynamics, growth alignment
+
+## Key Evaluation Factors
+
+Beyond basic skill and availability matching, also consider:
+
+- **Experience level appropriateness** - Match the required role level (Junior, Mid, Senior, Lead, Principal)
+- **Domain expertise** - Past project experience in similar contexts
+- **Client continuity** - Candidates with history at this client (when beneficial)
+- **Team composition** - How candidate complements other team members
+- **Career growth** - Appropriate stretch opportunities for development
+- **Cost efficiency** - Balance quality with project budget constraints
+
+## Philosophy
+
+- **Find fit, don't eliminate** - Look for reasons why candidates CAN succeed
+- **Holistic assessment** - A candidate strong in 3 of 4 areas may be better than one perfect in 1 area
+- **Practical judgment** - Real-world experience and proven delivery matter as much as skill lists
 
 Find the top 3 candidates for this role. Apply the strategy above when ranking.
 Return results using the CANDIDATES_FOR_ROLE structured format.
