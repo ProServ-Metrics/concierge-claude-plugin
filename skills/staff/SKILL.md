@@ -113,57 +113,24 @@ Call `TodoWrite`: mark task 2 (`Fetch roles & requirements`) as `completed`, tas
 
 ---
 
-## Step 3 — Present candidates as interactive selection widgets
+## Step 3 — Present candidates using AskUserQuestion
 
-Once all scouts return, for **each role** render a separate interactive widget using `mcp__visualize__show_widget`.
+Once all scouts return, for **each role** call the `AskUserQuestion` tool once. Present the candidates as numbered options plus a "Find more candidates" choice.
 
-Each widget is a radio-button card with:
-- **Title**: the role name (e.g. "Senior Developer")
-- **Options**: one radio button per candidate showing name, technical fit score, and availability
-- **A final option**: "🔍 Find more candidates for this role"
-- **A "Select" button** that, when clicked, outputs the chosen candidate name as text
-- Adaptive CSS variables for light/dark
+Format the question exactly like this:
 
-Widget spec:
-```html
-<!-- One widget per role — example for "Senior Developer" -->
-<style>
-  :root { --bg: #f4f4f8; --surface: #fff; --border: #e0e0ea; --text: #1a1a2e; --accent: #1976d2; --accent-bg: rgba(25,118,210,.1); }
-  @media(prefers-color-scheme:dark){ :root{ --bg:#0f0f1a; --surface:#1a1a2e; --border:#2a2a4a; --text:#e0e0e0; --accent:#1976d2; --accent-bg:rgba(25,118,210,.2); } }
-  body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);padding:16px;margin:0}
-  h3{font-size:14px;font-weight:600;margin-bottom:12px}
-  label{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:6px;margin-bottom:6px;cursor:pointer;background:var(--surface);transition:.15s}
-  label:hover,input:checked+label{border-color:var(--accent);background:var(--accent-bg)}
-  input[type=radio]{display:none}
-  .candidate-name{font-weight:600;font-size:13px}
-  .candidate-meta{font-size:11px;opacity:.7;margin-top:2px}
-  .score{font-size:11px;font-weight:700;color:var(--accent)}
-  .find-more{border-style:dashed;color:var(--accent)}
-  button{margin-top:12px;width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer}
-  button:hover{opacity:.9}
-</style>
-<h3>[Role Name]</h3>
-<form>
-  <input type="radio" name="pick" id="c1">
-  <label for="c1">
-    <div>
-      <div class="candidate-name">[Candidate 1 Name]</div>
-      <div class="candidate-meta">[Title] · Available: [date]</div>
-    </div>
-    <div class="score">[fit]/10</div>
-  </label>
-  <!-- repeat for c2, c3 -->
-  <input type="radio" name="pick" id="more">
-  <label for="more" class="find-more">🔍 Find more candidates for this role</label>
-  <button onclick="const v=document.querySelector('[name=pick]:checked');if(v)document.body.innerHTML='<p>Selected: '+v.closest('label').querySelector('.candidate-name').innerText+'</p>';return false">Select</button>
-</form>
+```
+Which candidate would you like for [Role Name]?
+
+1. [Candidate 1 Name] — [Title] · Fit: [score]/10 · Available: [date or "Immediate"]
+2. [Candidate 2 Name] — [Title] · Fit: [score]/10 · Available: [date]
+3. [Candidate 3 Name] — [Title] · Fit: [score]/10 · Available: [date]
+4. 🔍 Find more candidates for this role
 ```
 
-- `title`: `"[roleName]_candidate_selection"`
-- `loading_messages`: `["Loading candidates…"]`
+Ask one role at a time, in the order they appear in the opportunity. Wait for the user's response before asking about the next role.
 
-Render one widget per role. After all widgets are displayed, say:
-> "Select one candidate per role — or choose 'Find more candidates' to run another scout for that role."
+If the user selects "Find more candidates" (option 4), spawn another `concierge:talent-scout` Task for that role and ask again when it returns.
 
 Call `TodoWrite`: mark task 3 (`Scout for candidates`) as `completed`, task 4 (`Review candidates & select lineup`) as `in_progress`.
 
