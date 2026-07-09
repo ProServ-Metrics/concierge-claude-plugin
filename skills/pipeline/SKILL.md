@@ -1,49 +1,30 @@
 ---
 name: pipeline
 description: Review the opportunity pipeline and analyze resource allocation. Shows open opportunities, their staffing status, and how proposed team assignments affect the broader pipeline. Use when you want an overview of what's open or need to check for resource conflicts.
-argument-hint: [opportunity-id or 'overview']
-when_to_use: pipeline, open opportunities, what's available, resource conflicts, who else needs staffing
----
+when_to_use: pipeline, open opportunities, what's available, resource conflicts, what needs staffing, what deals are in flight, what's coming up, show me the pipeline, staffing gaps, upcoming engagements---
 
 # Pipeline Review
 
-Review the opportunity pipeline and analyze resource allocation.
+Review the current opportunity pipeline and analyze resource allocation.
 
 ## Instructions
 
-**If `$ARGUMENTS` is empty or 'overview':**
-1. Call `list_opportunities_by_status` (status: "open")
-2. Present a summary table:
+1. Call `list_opportunities` with:
+   - `opportunityStages: ["NEGOTIATION", "PROPOSAL"]`
+   - `fields: "Basic,Roles,RoleRequiredTechnicalSkills"`
+
+2. Sort results by start date ascending (soonest first).
+
+3. Present a summary table, **prefaced with a brief note** that the view is filtered to NEGOTIATION and PROPOSAL stages and offer to show all stages:
 
 | Opportunity | Client | Stage | Start | Open Roles |
 |-------------|--------|-------|-------|------------|
 | ... | ... | ... | ... | X of Y |
 
-Highlight any opportunities that are overdue for staffing or have urgent start dates within 4 weeks.
+Count "open roles" as roles with no assigned employee (or unfilled role assignments).
+
+Highlight any opportunities that are overdue for staffing or have urgent start dates within 4 weeks of today.
 
 ---
 
-**If `$ARGUMENTS` contains an opportunity ID:**
-
-1. Call `get_opportunity_by_id` to get full details including the current role assignments
-2. Spawn a pipeline analyst subagent:
-   - `description`: `"Pipeline resource analysis for [opportunityName]"`
-   - `agent`: `"concierge:pipeline-analyst"`
-   - `prompt`:
-   ```
-   OPPORTUNITY: [opportunityName] (ID: [opportunityId])
-   CLIENT: [clientName]
-   START: [startDate]
-   
-   CURRENT TEAM ASSIGNMENTS:
-   [list each role and assigned employee if any]
-   
-   Analyze resource allocation: identify pipeline conflicts, capacity concerns, 
-   and alternative staffing options.
-   ```
-
-3. Present the resource allocation analysis
-
----
-
-Offer to drill into any opportunity or run a staffing workflow for it.
+Offer to drill into any specific opportunity or run a staffing workflow for it.
