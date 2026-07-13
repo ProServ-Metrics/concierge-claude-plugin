@@ -16,6 +16,17 @@
       "repository": "https://github.com/ProServ-Metrics/concierge-claude-plugin",
       "keywords": ["staffing", "hr", "resource-management", "consulting", "mcp"],
       "category": "productivity"
+    },
+    {
+      "name": "concierge-foundry",
+      "source": "./foundry-plugin",
+      "description": "Staff engagements with parallel Foundry-hosted talent scouts — server-side scouting via Azure AI Foundry, split-tool polling for fast responses",
+      "author": {
+        "name": "PSMetrics"
+      },
+      "repository": "https://github.com/ProServ-Metrics/concierge-claude-plugin",
+      "keywords": ["staffing", "hr", "resource-management", "consulting", "mcp", "foundry", "azure"],
+      "category": "productivity"
     }
   ]
 }
