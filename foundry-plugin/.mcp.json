@@ -3,6 +3,10 @@
     "Concierge by ProServe Metrics (Foundry)": {
       "type": "http",
       "url": "https://apim-tai5zuwujuc2k.azure-api.net/mcp"
+    },
+    "Concierge by ProServe Metrics (Foundry Dev)": {
+      "type": "http",
+      "url": "https://apim-tai5zuwujuc2k.azure-api.net/mcp-dev"
     }
   }
 }
