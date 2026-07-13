@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.claude.ai/plugin-marketplace/v1",
+  "name": "concierge-foundry-demo",
+  "description": "AI-powered staffing and resource management powered by Azure AI Foundry hosted agents",
+  "owner": {
+    "name": "PSMetrics"
+  },
+  "plugins": [
+    {
+      "name": "concierge-foundry",
+      "source": "./",
+      "description": "Staff engagements with parallel Foundry-hosted talent scouts, evaluate team lineups, and review the pipeline — powered by the Concierge MCP server and Azure AI Foundry",
+      "author": {
+        "name": "PSMetrics"
+      },
+      "repository": "https://github.com/ProServ-Metrics/concierge-claude-plugin",
+      "keywords": ["staffing", "hr", "resource-management", "consulting", "mcp", "foundry", "azure"],
+      "category": "productivity"
+    }
+  ]
+}
