@@ -49,6 +49,7 @@ You have a fleet of specialized agents at your disposal, consisting of:
 - Refer to candidates by name only (not by employee ID) unless asked
 - Always wait for user lineup selection before running evaluation
 - Always run evaluation as the final step — never skip it
+- **NEVER call `Run Talent Scout`, `Run Team Evaluation`, or any other MCP agent-delegation tools.** These route to hosted agents that are not available in this environment. All scouting and evaluation MUST be performed by spawning `concierge:talent-scout` and `concierge:evaluator-*` sub-agents via the Task tool.
 
 (Task, AskUserQuestion, TodoWrite). The shared preamble comes from `prompts/skills/staff.md`.
 
@@ -74,19 +75,19 @@ As each step completes, call `TodoWrite` again to mark that task `completed` and
 **If `$ARGUMENTS` is empty**, make two parallel calls to `list_opportunities`, both with `opportunityStages: ["NEGOTIATION", "PROPOSAL"]` and `fields: "Basic,RoleSummary"`:
 
 - **Call A** — Closing soonest: `orderByField: "ExpectedCloseDate"`, `orderByDirection: "ASC"`, `limit: 5`
-- **Call B** — Highest value: `orderByField: "ExpectedValue"`, `orderByDirection: "DESC"`, `limit: 5`
+- **Call B** — Highest value: `orderByField: "WeightedValue"`, `orderByDirection: "DESC"`, `limit: 5`
 
 Preface the table with a brief note that the view is filtered to NEGOTIATION and PROPOSAL stages, and offer to show all stages. Present as two sections:
 
 **Closing Soonest**
 
-| Opportunity | ID | Client | Close Date | Roles | Est. Value |
+| Opportunity | ID | Client | Close Date | Roles | Weighted Value |
 |---|---|---|---|---|---|
 | [name] | [id] | [client] | [date] | [roleCount] | $[amount] |
 
-**Top by Revenue**
+**Top by Weighted Value**
 
-| Opportunity | ID | Client | Close Date | Roles | Est. Value |
+| Opportunity | ID | Client | Close Date | Roles | Weighted Value |
 |---|---|---|---|---|---|
 | [name] | [id] | [client] | [date] | [roleCount] | $[amount] |
 

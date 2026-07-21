@@ -28,6 +28,12 @@ Call **Get Employees** with all employee IDs and fields `Basic,Organization,Tech
 
 Also call **Get Opportunity Details** if you have an opportunity ID (for required skills and start/end dates).
 
+## IMPORTANT: Sub-agent-only evaluation
+
+**NEVER call `Run Team Evaluation`, `Run Talent Scout`, or any MCP agent-delegation tools.** These route to hosted agents that are not available in this environment. All evaluation MUST be performed by spawning `concierge:evaluator-*` sub-agents via the Task tool (Step 3 below).
+
+---
+
 ## Step 3 — Spawn all 6 dimension evaluators in parallel (ALL IN ONE RESPONSE)
 
 Call the Task tool **6 times in the same response**. Each agent receives the full team data from Step 2. Each agent returns **structured JSON** (not markdown).
