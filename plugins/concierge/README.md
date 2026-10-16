@@ -13,6 +13,7 @@ The staffing skills (staff, find candidates, check availability, evaluate a line
 | Skill | `/concierge:experience-match` | "Have we done this before?" — delivered work matching a scope, with evidence and an RFP-ready paragraph |
 | Skill | `/concierge:expert-finder` | Who should join this call — evidence-backed expertise, soft skills, **DIR**, **CSOT** |
 | Skill | `/concierge:pursuit-qualifier` | Qualify an opportunity — **REVI**, proof, team readiness, margin, verdict |
+| Skill | `/concierge:pursuit-workspace` | Build a pursuit team and set it up in Concierge: a workspace with the team, client profile and comparable work |
 | Skill | `/concierge:rate-benchmark` | Bill rates from comparable work; cost and margin (future feature: pay data) |
 | Skill | `/concierge:evidence-bios` | Client-facing consultant bios backed by delivery evidence |
 | Skill | `/concierge:account-brief` | Internal client brief before a meeting or QBR |
@@ -66,6 +67,7 @@ Run `/help` — the `concierge` namespace lists the skills — or ask *"who's on
 /concierge:expert-finder solution design, logistics, tomorrow afternoon
 /concierge:experience-match enterprise architecture assessment
 /concierge:pursuit-qualifier OPP-2024-004
+/concierge:pursuit-workspace OPP-2024-004
 /concierge:rate-benchmark 2 senior data engineers and an architect
 /concierge:evidence-bios EMP0046, EMP0005
 /concierge:sellable-capacity next 8 weeks
