@@ -1,31 +1,45 @@
 {
   "$schema": "https://schemas.claude.ai/plugin-marketplace/v1",
   "name": "concierge-demo",
-  "description": "AI-powered staffing and resource management for Claude Code",
+  "description": "Concierge by ProServe Metrics - plugins for Claude Code",
   "owner": {
     "name": "PSMetrics"
   },
   "plugins": [
     {
       "name": "concierge",
-      "source": "./",
-      "description": "Find candidates, staff engagements, evaluate team lineups, and review the pipeline — powered by the Concierge MCP server",
+      "source": "./plugins/concierge",
+      "description": "Sales and pipeline work on Concierge data: account briefs, deal reviews, forecasts, expansion plays, proposals and consultant profiles - through the Concierge MCP server",
       "author": {
         "name": "PSMetrics"
       },
       "repository": "https://github.com/ProServ-Metrics/concierge-claude-plugin",
-      "keywords": ["staffing", "hr", "resource-management", "consulting", "mcp"],
+      "keywords": [
+        "sales",
+        "pipeline",
+        "resource-management",
+        "consulting",
+        "mcp"
+      ],
       "category": "productivity"
     },
     {
       "name": "concierge-foundry",
-      "source": "./foundry-plugin",
+      "source": "./plugins/concierge-foundry",
       "description": "Staff engagements with parallel Foundry-hosted talent scouts — server-side scouting via Azure AI Foundry, split-tool polling for fast responses",
       "author": {
         "name": "PSMetrics"
       },
       "repository": "https://github.com/ProServ-Metrics/concierge-claude-plugin",
-      "keywords": ["staffing", "hr", "resource-management", "consulting", "mcp", "foundry", "azure"],
+      "keywords": [
+        "staffing",
+        "hr",
+        "resource-management",
+        "consulting",
+        "mcp",
+        "foundry",
+        "azure"
+      ],
       "category": "productivity"
     }
   ]

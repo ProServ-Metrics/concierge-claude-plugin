@@ -1,0 +1,8 @@
+{
+  "name": "concierge",
+  "description": "Sales and pipeline work on Concierge data: account briefs, deal reviews, forecasts, expansion plays, proposals and consultant profiles.",
+  "version": "2.4.0",
+  "author": {
+    "name": "Moneyball"
+  }
+}
