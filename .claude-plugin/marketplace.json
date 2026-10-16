@@ -9,7 +9,7 @@
     {
       "name": "concierge",
       "source": "./plugins/concierge",
-      "description": "Sales and pipeline work on Concierge data: account briefs, deal reviews, forecasts, expansion plays, proposals and consultant profiles - through the Concierge MCP server",
+      "description": "Sales work on Concierge data: experience match, expert finder, pursuit qualification (REVI), rate benchmarks, evidence-backed bios, sellable capacity (CSOT), forecasts, account briefs and proposals - through the Concierge MCP server",
       "author": {
         "name": "PSMetrics"
       },
@@ -20,25 +20,6 @@
         "resource-management",
         "consulting",
         "mcp"
-      ],
-      "category": "productivity"
-    },
-    {
-      "name": "concierge-foundry",
-      "source": "./plugins/concierge-foundry",
-      "description": "Staff engagements with parallel Foundry-hosted talent scouts — server-side scouting via Azure AI Foundry, split-tool polling for fast responses",
-      "author": {
-        "name": "PSMetrics"
-      },
-      "repository": "https://github.com/ProServ-Metrics/concierge-claude-plugin",
-      "keywords": [
-        "staffing",
-        "hr",
-        "resource-management",
-        "consulting",
-        "mcp",
-        "foundry",
-        "azure"
       ],
       "category": "productivity"
     }

@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "Concierge by ProServe Metrics (Foundry)": {
-      "type": "http",
-      "url": "https://apim-concierge-mcp-localdev.azure-api.net/mcp"
-    }
-  }
-}
