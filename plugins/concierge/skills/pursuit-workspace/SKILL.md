@@ -91,19 +91,23 @@ Show the score to two decimals with its band, for example "1.31 (Above Average)"
 ## Data gathering
 
 **Round 1, in parallel:**
-1. `get_opportunity_by_id`: the client, stage, value, dates, **REVI**, and its roles (title, level, hours, dates,
-   required skills).
+1. `get_opportunity_by_id`: the client, stage, value, dates, **REVI**, its roles (title, level, hours, dates,
+   required skills) and `pursuitTeam` (the people already working the deal - may be empty; ids starting EMP are
+   employees, the rest sales staff).
 2. `list_technical_skills`: to turn the roles' required skill names into skill keys.
 3. `list_clients` with `includeEngagements: false`: client industries.
 
 **Round 2, in parallel:**
-4. `get_client_by_id` for the opportunity's client: its engagements with the firm. If there's no client record, it's
-   a new logo: the Client Profile group holds the opportunity alone.
+4. `get_client_by_id` for the opportunity's client: its industry and engagements with the firm. If there's no client
+   record, it's a new logo: no client card, and no relationship people or client engagements.
 5. For each role, `list_employees_with_technical_skills_by_skill_keys` with its required skill keys and
    `deliveryOnly: true`, `compact: true`, `limit: 20`: the people who've delivered that work.
 
-**Round 3: the team.** Take the strongest 3 candidates per role (highest skill score on the role's skills; at most
-15 people in all), then in parallel:
+**Round 3, in parallel:**
+- `get_engagement_by_id` for the client's 4 most recent engagements: their teams - the people who've worked for this
+  client.
+- The team checks below, for the strongest 3 candidates per role (highest skill score on the role's skills) plus the
+  pursuit team's employees, at most 15 people in all:
 6. `get_employees_availability_for_period` for the roles' dates (from the earliest role start to the latest end):
    their **CSOT**.
 7. `get_employees_dir_scores`: their **DIR**.
@@ -113,33 +117,43 @@ Show the score to two decimals with its band, for example "1.31 (Above Average)"
 Pick one person per role. Prefer delivered evidence on the role's skills, then room in the window (CSOT under ~80%),
 then DIR. Don't give one person two roles unless no one else fits; say so if you do.
 
-**Round 4: comparable work.** From the evidence in step 8, plus `list_engagements_by_status` with `fields: "Basic"`
-(matching engagements' `RequiredSkills` to the roles' skills), pick up to 6 delivered engagements most like this
-pursuit: exact skills first, then the same industry, then most recent. Leave out this client's own engagements: they
-belong in the Client Profile.
+**Round 4: comparable work.** From the evidence in step 8, plus `list_engagements_by_status` with
+`statuses: ["COMPLETED", "ACTIVE"]`, `fields: "Basic"` (each engagement's `RequiredSkills`, `ClientIndustry` and
+`ClientSatisfactionScore`), pick up to 6 delivered engagements in the technology and/or this industry: exact skills
+first, then the same industry, then most recent - preferring ones delivered well (client satisfaction 4 or above).
+
+**Relevant people**, two kinds (a few of each, people not already on the team):
+- **Relationship:** people who've worked for this client before (the client's engagement teams, round 3).
+- **Technology / industry:** people who've delivered engagements in the roles' skills and/or this industry (the
+  runners-up from round 3 and the evidence).
 
 ## Create the workspace
 
 Call `create_workspace` with:
-- **title:** "Pursuit: [opportunity name]"
-- **groups**, in this order:
-  1. **Pursuit Team**: the chosen people, in role order, each with a `note`: their role and why (one line).
-     Give every card a short `note` on why it is there.
-  2. **Client Profile**: the opportunity, then the client, then the client's engagements (most recent first, at most 8).
-  3. **Relevant engagement experience**: the comparable engagements.
+- **title:** "[Client] - [Opportunity]", e.g. "OhioHealth - Warehouse Automation" (the opportunity alone for a new logo)
+- **groups**, in this order (leave out a group with nothing in it; a person or engagement appears once, in the first
+  group that fits), every card with a short `note` on why it is there:
+  1. **Opportunity Details**: the opportunity, then the client.
+  2. **Recommended Pursuit Team**: first the existing pursuit team's employees (note their pursuit role, e.g. "On the
+     pursuit: Estimate Owner"; sales staff aren't cards - name them in the summary), then your picks in role order
+     (note: their role and why).
+  3. **Relevant People**: the relationship people (note: "Worked with OhioHealth on Strategy Development for Business
+     Intelligence, 2023"), then the technology / industry people (note: what they delivered).
+  4. **Relevant Engagements**: the client's engagements with us (most recent first, at most 6), then the comparable
+     delivered work (note: why it's relevant, and how it went).
 - **summary**: markdown for the workspace's first message, for the account team: one line on the opportunity (stage,
   value, close date, REVI), then a short table (Role | Person | Why, from the evidence | CSOT), then one line on the
   comparable work. Plain business language: names, not IDs.
 
-If `create_workspace` isn't available, or it returns an error, still give the user the team, client profile and
-comparable work below, and say the workspace couldn't be created and why, in one plain sentence.
+If `create_workspace` isn't available, or it returns an error, still give the user the team, relevant people and
+engagements below, and say the workspace couldn't be created and why, in one plain sentence.
 
 ## Reply
 
-Lead with the link: "**I set up a pursuit workspace in Concierge: [Pursuit: name](url)**". Then:
-- **Pursuit Team:** a table (Role | Person | Why | DIR | CSOT).
-- **Client Profile:** one line (relationship so far, open pipeline).
-- **Relevant engagement experience:** the engagements, one line each.
+Lead with the link: "**I set up a pursuit workspace in Concierge: [Client - Opportunity](url)**". Then:
+- **Recommended Pursuit Team:** a table (Role | Person | Why | DIR | CSOT), the existing pursuit team first.
+- **Relevant People:** one line each - who they are and why (relationship, or technology / industry).
+- **Relevant Engagements:** one line each - the client's own, then comparable work.
 - **Gaps:** roles with no strong candidate, or a thin evidence base. Omit if none.
 
 Internal: DIR, CSOT and rates stay inside the firm.
