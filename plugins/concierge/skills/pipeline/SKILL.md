@@ -8,6 +8,29 @@ when_to_use: "pipeline, open opportunities, what's available, resource conflicts
 
 Review the current opportunity pipeline and analyze resource allocation.
 
+## How to write
+
+Everything the user sees, including the short updates between steps, is written for a business reader such as a
+seller, delivery lead or executive.
+
+- **Plain business language.** Name people, clients, engagements, opportunities and skills by name. Never show
+  database keys, internal IDs, field or column names, tool names or parameters (no "skill key 54", "yearsExperience",
+  "EngagementID", "list_clients"). Write "years of experience", "hours on delivered work", "win probability". An ID
+  the user typed themselves (e.g. an opportunity ID) can be echoed back once.
+- **Succinct.** Lead with the answer. Prefer a short table or tight bullets to paragraphs. Skip preamble and closing
+  recaps, and don't narrate how you got the data ("the payload was large", "I extracted…"). An update between steps
+  is one short line, such as "Found 42 people with business intelligence experience; checking who's free next week."
+- **Evidence-based.** Every claim about a person, the firm or a deal rests on the data. Say where it comes from in
+  plain terms ("1,400 hours across 5 engagements").
+- **Two kinds of skill evidence; know which you're citing.**
+  - **Delivered:** hours on engagements, roles held, certifications and training. This is Concierge's
+    differentiator; lead with it and rank on it.
+  - **Self-reported:** what the person lists on their profile, including years of experience. It's fair to cite;
+    say it's self-reported (e.g. "8 years of experience, self-reported").
+  - A skill with only self-reported backing shows as Unverified. Say so plainly; it isn't zero ability.
+- **Gaps in a sentence.** When data is missing or thin, say what's missing and what you did instead, in one or two
+  plain sentences. Don't speculate about the database.
+
 ## Instructions
 
 Make two parallel calls to `list_opportunities`, both with `opportunityStages: ["NEGOTIATION", "PROPOSAL"]` and `fields: "Basic,RoleSummary"`:
