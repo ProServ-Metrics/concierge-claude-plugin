@@ -78,6 +78,8 @@ Show the score to two decimals with its band, for example "1.31 (Above Average)"
 - **Only what you'll use.** Pass `fields` (`list_employees`, `list_engagements_by_status`, `list_opportunities`),
   `technicalSkillKeys` on `get_employees_technical_skills` (several people's skill evidence in one call), and `includeEngagements: false` on `list_clients`. For one
   opportunity, use `get_opportunity_by_id` (it includes roles and required skills) rather than listing them all.
+- **Shortlist compactly.** `list_employees_with_technical_skills_by_skill_keys` always with `compact: true` and a
+  `limit` (20 unless a step says otherwise): strongest match first, a fraction of the size.
 - **Once per run.** Fetch reference lists (`list_technical_skills`, `list_clients`) once; reuse earlier results and
   filter lists yourself rather than calling again.
 - **Cap the deep dives.** Tools with no batch version (`get_engagement_by_id`,
@@ -92,11 +94,11 @@ Show the score to two decimals with its band, for example "1.31 (Above Average)"
 2. `list_clients` with `includeEngagements: false` — client industries, only if the request names an industry.
 
 **Round 2:**
-3. `list_employees_with_technical_skills_by_skill_keys` with those keys, `deliveryOnly: true` — the holders.
+3. `list_employees_with_technical_skills_by_skill_keys` with those keys, `deliveryOnly: true`, `compact: true`, `limit: 20` — the holders.
 
 **Round 3 — for the strongest 8 holders (highest skill score first), all in one parallel round:**
 4. `get_employees_technical_skills` with all 8 `ids` and `technicalSkillKeys` set to the matched keys — one call:
-   each person's evidence for those skills (`engagementSources`: engagements, roles, hours, dates; `certificationSources`).
+   each person's evidence for those skills (`engagements`: engagement, client, role, dates, hours; `certifications`).
 5. `list_employees` with all 8 `ids` and `fields: "Basic,SoftSkills"` — one call: their scored soft skills
    (Communication, Presentation Skills, Presentation Experience, …, 0–10). Never `get_employee_by_id` per person.
 6. `get_employees_dir_scores` (comma-separated IDs, one call) — each person's **DIR**.

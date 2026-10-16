@@ -67,6 +67,8 @@ clients without them):
 - **Only what you'll use.** Pass `fields` (`list_employees`, `list_engagements_by_status`, `list_opportunities`),
   `technicalSkillKeys` on `get_employees_technical_skills` (several people's skill evidence in one call), and `includeEngagements: false` on `list_clients`. For one
   opportunity, use `get_opportunity_by_id` (it includes roles and required skills) rather than listing them all.
+- **Shortlist compactly.** `list_employees_with_technical_skills_by_skill_keys` always with `compact: true` and a
+  `limit` (20 unless a step says otherwise): strongest match first, a fraction of the size.
 - **Once per run.** Fetch reference lists (`list_technical_skills`, `list_clients`) once; reuse earlier results and
   filter lists yourself rather than calling again.
 - **Cap the deep dives.** Tools with no batch version (`get_engagement_by_id`,
@@ -93,10 +95,10 @@ Map the scope to skill keys:
 - **Same category** — other skills in the exact skills' categories.
 
 **3. Skills → people → engagements.** `list_employees_with_technical_skills_by_skill_keys` with the exact keys and
-`deliveryOnly: true` gives the holders and their scores. For the strongest holders (at most 8, highest skill score
+`deliveryOnly: true`, `compact: true`, `limit: 20` gives the holders and their scores. For the strongest holders (at most 8, highest skill score
 first), `get_employees_technical_skills` with their `ids` and `technicalSkillKeys` set to the keys you're matching returns
-those skills' evidence in one call: `engagementSources` (role, dates, hours, engagement, client) and
-`certificationSources`. Collect the engagements those sources name. When exact matches are thin (fewer than 3
+those skills' evidence in one call: `engagements` (engagement, client, role, dates, hours; the 5 most recent, with
+`engagementCount` the total) and `certifications`. Collect the engagements they name. When exact matches are thin (fewer than 3
 engagements), repeat for the co-occurring and same-category skills, tagging each engagement with its tier.
 
 **4. Industry.** The `list_clients` result from step 1 gives every client's `Industry`; take each engagement's
