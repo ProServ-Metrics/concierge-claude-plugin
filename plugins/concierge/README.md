@@ -10,17 +10,24 @@ The staffing skills (staff, find candidates, check availability, evaluate a line
 
 | Component | Name | Purpose |
 |-----------|------|---------|
-| Skill | `/concierge:pipeline` | Pipeline overview and resource conflict analysis |
-| Skill | `/concierge:build-proposal` | Client-facing proposal for an opportunity |
-| Skill | `/concierge:build-game-plan` | Internal delivery game plan for an opportunity |
-| Skill | `/concierge:consultant-card` / `consultant-profile` | A consultant's card or full profile as an HTML artifact |
-| Skill | `/concierge:account-brief` | Sales: internal client brief before a meeting or QBR |
-| Skill | `/concierge:deal-review` | Sales: qualify an opportunity — staffing readiness, estimated margin, verdict |
-| Skill | `/concierge:forecast` | Sales: weighted pipeline forecast vs. delivery capacity |
-| Skill | `/concierge:expansion-plays` | Sales: extensions, renewals, re-engagement and cross-sell targets |
-| Skill | `/concierge:sellable-capacity` | Sales: what the bench can take on, by skill and start date |
-| Agent | `@concierge:pipeline-analyst` | Analyses resource allocation (spawned by `/pipeline`) |
+| Skill | `/concierge:experience-match` | "Have we done this before?" — delivered work matching a scope, with evidence and an RFP-ready paragraph |
+| Skill | `/concierge:expert-finder` | Who should join this call — evidence-backed expertise, soft skills, **DIR**, **CSOT** |
+| Skill | `/concierge:pursuit-qualifier` | Qualify an opportunity — **REVI**, proof, team readiness, margin, verdict |
+| Skill | `/concierge:rate-benchmark` | Bill rates from comparable work; cost and margin (future feature: pay data) |
+| Skill | `/concierge:evidence-bios` | Client-facing consultant bios backed by delivery evidence |
+| Skill | `/concierge:account-brief` | Internal client brief before a meeting or QBR |
+| Skill | `/concierge:forecast` | Weighted pipeline forecast with **REVI**, against delivery capacity |
+| Skill | `/concierge:expansion-plays` | Extensions, renewals, re-engagement and cross-sell targets |
+| Skill | `/concierge:sellable-capacity` | Who the firm can sell now, measured with **CSOT** |
+| Skill | `/concierge:pipeline` | Open opportunities and resource conflicts |
+| Skill | `/concierge:build-proposal` | Client-facing proposal, with evidence-ranked experience |
+| Skill | `/concierge:build-game-plan` | Internal delivery game plan |
+| Skill | `/concierge:consultant-card` / `consultant-profile` | A consultant's card or full profile (with DIR) as HTML |
+| Agent | `@concierge:pipeline-analyst` | Analyses resource allocation (used by `/pipeline`) |
 | MCP | `Concierge by ProServe Metrics` | The Concierge MCP server, through its sign-in gateway |
+
+**Concierge's proprietary measures:** DIR (Delivery Impact Rating), CSOT (Capacity Sold Over Time®) and REVI (opportunity
+score) — and skills derived from delivery evidence, never self-reported.
 
 ---
 
@@ -56,17 +63,17 @@ Run `/help` — the `concierge` namespace lists the skills — or ask *"who's on
 ## Trying the skills
 
 ```
-/concierge:account-brief Atlantic Shipping Co
-/concierge:deal-review OPP-2024-002
-/concierge:forecast next quarter
-/concierge:expansion-plays
+/concierge:expert-finder solution design, logistics, tomorrow afternoon
+/concierge:experience-match enterprise architecture assessment
+/concierge:pursuit-qualifier OPP-2024-004
+/concierge:rate-benchmark 2 senior data engineers and an architect
+/concierge:evidence-bios EMP0046, EMP0005
 /concierge:sellable-capacity next 8 weeks
-/concierge:pipeline
-/concierge:build-proposal OPP-2024-002
+/concierge:forecast next quarter
 ```
 
-The sales views are internal (they include ratings, costs or individual availability) — share client-facing material
-through `/concierge:build-proposal` instead.
+Most views are internal (DIR, CSOT, rates, costs); share client-facing material through `/concierge:evidence-bios` and
+`/concierge:build-proposal`.
 
 ---
 

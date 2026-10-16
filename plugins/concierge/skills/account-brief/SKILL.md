@@ -9,12 +9,28 @@ when_to_use: "account brief, client brief, meeting prep, prep me for my call wit
 
 Build an internal account brief for client **$ARGUMENTS** — the one page a seller reads before a client meeting, QBR or pursuit kickoff.
 
-If no client is given, ask which client (offer the clients with the most open pipeline from `list_clients`). If a name is given rather than an ID, find it in `list_clients` first; if several match, ask which one.
+If no client is given, ask which client (offer the clients with the most open pipeline, from `list_opportunities`). If a name is given rather than an ID, find it in `list_clients` (with `includeEngagements: false`) first; if several match, ask which one.
+
+## Working style — use what this client offers
+
+Use the host's built-in tools when they exist, and fall back to plain text when they don't (this skill also runs in
+clients without them):
+- **Choices** — when the user has to pick (which opportunity, which client, which option), use the AskUserQuestion tool
+  if available: short labels, one-line descriptions. Otherwise list numbered options in text.
+- **Progress** — for work with several rounds of calls, keep a live task list with the TodoWrite tool if available
+  (one item per round, marked in progress and done as you go). Otherwise skip it — don't narrate.
+- **Collateral** — when the output is something to share or keep (a brief, a proposal, bios), offer to save it as a
+  document: a Word (.docx) or PowerPoint (.pptx) file or an artifact if the client can create them, otherwise a
+  markdown file. Always show the content inline too.
+- **Timelines and charts** — when the content is a schedule or a trend (a proposal timeline, who frees up when, a
+  forecast by month), render it as a timeline or chart (an artifact or visual) if the client supports one; otherwise a
+  table.
+- **Next steps** — end by offering 2–3 relevant next actions, as a choice (AskUserQuestion) when available.
 
 ## Data gathering — run these MCP calls in parallel
 
 1. `get_client_by_id` — industry, location, size, status, lifetime revenue, engagement counts, client contacts.
-2. `list_engagements_by_status` with `statuses: ["ACTIVE", "PLANNED", "COMPLETED"]` — keep only this client's engagements.
+2. `list_engagements_by_status` with `statuses: ["ACTIVE", "PLANNED", "COMPLETED"]`, `fields: "Basic"` — keep only this client's engagements.
 3. `list_opportunities` with `fields: "Basic,Roles"` (all stages) — keep only this client's opportunities.
 
 Then, for the client's **active** engagements and its **two most recent completed** ones only, call `get_engagement_by_id` for the team, the engagement manager, client satisfaction and progress. Don't fetch every past engagement.
@@ -48,4 +64,4 @@ One line: industry · location · client since [year] · [n] engagements · [lif
 
 This brief is **internal**: financials and ratings are fine here, but tell the user before they share it outside the firm.
 
-Offer next steps: run `/concierge:deal-review` on an open opportunity, `/concierge:expansion-plays` for this client, or draft a pre-meeting email to the primary contact.
+Offer next steps: run `/concierge:pursuit-qualifier` on an open opportunity, `/concierge:expansion-plays` for this client, or draft a pre-meeting email to the primary contact.

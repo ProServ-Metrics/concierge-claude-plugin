@@ -19,6 +19,67 @@ Then, for each proposed role assignment on the opportunity:
 - **Get Employee Technical Skills** for each assigned employee
 - **Get Employee Engagement Role Assignments** for each assigned employee (to surface relevant prior experience)
 
+## Working style — use what this client offers
+
+Use the host's built-in tools when they exist, and fall back to plain text when they don't (this skill also runs in
+clients without them):
+- **Choices** — when the user has to pick (which opportunity, which client, which option), use the AskUserQuestion tool
+  if available: short labels, one-line descriptions. Otherwise list numbered options in text.
+- **Progress** — for work with several rounds of calls, keep a live task list with the TodoWrite tool if available
+  (one item per round, marked in progress and done as you go). Otherwise skip it — don't narrate.
+- **Collateral** — when the output is something to share or keep (a brief, a proposal, bios), offer to save it as a
+  document: a Word (.docx) or PowerPoint (.pptx) file or an artifact if the client can create them, otherwise a
+  markdown file. Always show the content inline too.
+- **Timelines and charts** — when the content is a schedule or a trend (a proposal timeline, who frees up when, a
+  forecast by month), render it as a timeline or chart (an artifact or visual) if the client supports one; otherwise a
+  table.
+- **Next steps** — end by offering 2–3 relevant next actions, as a choice (AskUserQuestion) when available.
+
+### Finding the proof
+
+For **Related engagements** below, use the experience graph — it ranks the firm's delivered work against the
+opportunity's required skills and keeps every claim tied to evidence:
+
+## Experience graph — finding comparable work with its evidence
+
+Concierge's skills are **derived from delivery evidence** — engagements, roles, hours, certifications — never
+self-reported. Every person-skill carries the engagements behind it. Use that chain; never state a capability, a
+person's skill or a past engagement without the evidence for it.
+
+**1. Scope → skills.** Call `list_technical_skills` once (the full taxonomy: each skill has a key, a name and one
+category). Map the scope to skill keys:
+- From an **opportunity ID**: `list_opportunities` with `fields: "Basic,Roles,RoleRequiredTechnicalSkills"` and find the
+  opportunity — its roles list the required skill keys. (`get_opportunity_by_id` doesn't include roles.)
+- From **free text**: match phrases to skill names (exact or obvious synonyms). Note which phrases matched nothing —
+  report them as gaps rather than stretching a match.
+
+**2. Widen in tiers.** The taxonomy has categories but no parent/child links, so "close" means:
+- **Exact** — the skills the scope names.
+- **Co-occurring** — skills delivered on the same engagements as the exact skills (seen in step 3).
+- **Same category** — other skills in the exact skills' categories.
+
+**3. Skills → people → engagements.** `list_employees_with_technical_skills_by_skill_keys` with the exact keys and
+`deliveryOnly: true` gives the holders and their scores. For the strongest holders (at most 8, highest skill score
+first), `get_employee_technical_skills` with `technicalSkillKeys` set to the keys you're matching returns those skills'
+evidence (always pass the keys: a person's full evidence is too large to read): `engagementSources` (role, dates, hours,
+engagement, client) and `certificationSources`. Collect the engagements those sources name. When exact matches are thin
+(fewer than 3 engagements), repeat for the co-occurring and same-category skills, tagging each engagement with its tier.
+
+**4. Industry.** `list_clients` with `includeEngagements: false` once gives every client's `Industry`; take each
+engagement's industry from its client.
+
+**5. Rank.** Exact before co-occurring before same category; then industry match (if the scope has one); then recency
+(latest role end date); then volume (hours, people involved).
+
+**Evidence row** — what every comparable engagement carries forward: engagement name and ID, client and industry,
+dates, the people and roles that delivered it, the skills it evidences, its tier, and hours.
+
+**Honesty rules**
+- Never imply exact experience the evidence doesn't show. When the best match is co-occurring or same category, say so
+  plainly: "not that exactly, but here is the closest delivered work."
+- No evidence, no claim. If nothing matches, say so and list what *was* searched.
+- Resolve every person, client and engagement to its real ID; never invent names, counts or dates.
+
 ## Analysis before writing
 
 Before drafting, reason through:
@@ -107,3 +168,9 @@ If DISC profiles are available: briefly describe the team's profile mix and what
 
 #### Proposed Timeline
 Present a high-level milestone timeline based on the opportunity's proposed dates and engagement type. Use phases (e.g. Discovery, Design, Build, UAT, Go-Live) appropriate to the engagement type. Keep it high-level — this is a proposal, not a project plan.
+
+---
+
+**Deliver it as a document.** Offer the proposal as a Word document (.docx) — and the Team & Timeline as a short
+PowerPoint (.pptx) — if the client can create files; otherwise a markdown file. Render the Proposed Timeline as a
+timeline or chart where the client supports one.

@@ -9,10 +9,26 @@ when_to_use: "expansion, upsell, cross-sell, renewal, extension, whitespace, gro
 
 Find the best opportunities to grow existing accounts. Scope: **$ARGUMENTS** (a client, an industry, or blank for the whole client base).
 
+## Working style — use what this client offers
+
+Use the host's built-in tools when they exist, and fall back to plain text when they don't (this skill also runs in
+clients without them):
+- **Choices** — when the user has to pick (which opportunity, which client, which option), use the AskUserQuestion tool
+  if available: short labels, one-line descriptions. Otherwise list numbered options in text.
+- **Progress** — for work with several rounds of calls, keep a live task list with the TodoWrite tool if available
+  (one item per round, marked in progress and done as you go). Otherwise skip it — don't narrate.
+- **Collateral** — when the output is something to share or keep (a brief, a proposal, bios), offer to save it as a
+  document: a Word (.docx) or PowerPoint (.pptx) file or an artifact if the client can create them, otherwise a
+  markdown file. Always show the content inline too.
+- **Timelines and charts** — when the content is a schedule or a trend (a proposal timeline, who frees up when, a
+  forecast by month), render it as a timeline or chart (an artifact or visual) if the client supports one; otherwise a
+  table.
+- **Next steps** — end by offering 2–3 relevant next actions, as a choice (AskUserQuestion) when available.
+
 ## Data gathering — in parallel
 
-1. `list_clients` — the client base (or just the named client via `get_client_by_id`).
-2. `list_engagements_by_status` with `statuses: ["ACTIVE", "COMPLETED"]` — the engagement history.
+1. `list_clients` with `includeEngagements: false` — the client base (or just the named client via `get_client_by_id`).
+2. `list_engagements_by_status` with `statuses: ["ACTIVE", "COMPLETED"]`, `fields: "Basic"` — the engagement history.
 3. `list_opportunities` (all open stages, `fields: "Basic"`) — what's already being pursued, so it isn't proposed twice.
 
 For the shortlisted plays only (at most 8 engagements), call `get_engagement_by_id` for satisfaction, progress and the team.

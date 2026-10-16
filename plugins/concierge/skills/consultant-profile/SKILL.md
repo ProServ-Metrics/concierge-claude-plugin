@@ -33,6 +33,9 @@ Call `mcp__visualize__show_widget` with:
 
 Do **not** output the HTML as a fenced code block — call the visualize tool so it renders as an interactive card.
 
+**If `mcp__visualize__show_widget` isn't available** (another client): render the full HTML as an artifact if the client
+supports artifacts, otherwise save it as `[FirstName]_[LastName]_profile.html` and say where it is.
+
 Then write one sentence confirming who the profile is for.
 
 # Consultant Profile

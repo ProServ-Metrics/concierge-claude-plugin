@@ -9,11 +9,27 @@ when_to_use: "forecast, sales forecast, weighted pipeline, commit, best case, pi
 
 Forecast the open pipeline and check it against the firm's capacity to deliver it. Scope: **$ARGUMENTS** (a quarter, a number of months, a sales owner or an industry; default: the next two quarters, all owners).
 
+## Working style — use what this client offers
+
+Use the host's built-in tools when they exist, and fall back to plain text when they don't (this skill also runs in
+clients without them):
+- **Choices** — when the user has to pick (which opportunity, which client, which option), use the AskUserQuestion tool
+  if available: short labels, one-line descriptions. Otherwise list numbered options in text.
+- **Progress** — for work with several rounds of calls, keep a live task list with the TodoWrite tool if available
+  (one item per round, marked in progress and done as you go). Otherwise skip it — don't narrate.
+- **Collateral** — when the output is something to share or keep (a brief, a proposal, bios), offer to save it as a
+  document: a Word (.docx) or PowerPoint (.pptx) file or an artifact if the client can create them, otherwise a
+  markdown file. Always show the content inline too.
+- **Timelines and charts** — when the content is a schedule or a trend (a proposal timeline, who frees up when, a
+  forecast by month), render it as a timeline or chart (an artifact or visual) if the client supports one; otherwise a
+  table.
+- **Next steps** — end by offering 2–3 relevant next actions, as a choice (AskUserQuestion) when available.
+
 ## Data gathering — in parallel
 
 1. `list_opportunities` with `opportunityStages: ["INITIAL CONTACT", "QUALIFICATION", "PROPOSAL", "NEGOTIATION"]` and `fields: "Basic,Roles"` — every open opportunity with its roles.
 2. `list_available_employees` with `minimumPercentageAvailable: 50` — who has meaningful capacity.
-3. `list_engagements_by_status` with `statuses: ["ACTIVE"]` — current delivery, to see which engagements end inside the forecast window (people coming free).
+3. `list_engagements_by_status` with `statuses: ["ACTIVE"]`, `fields: "Basic"` — current delivery, to see which engagements end inside the forecast window (people coming free).
 
 Apply the scope filter (owner, industry, window) after fetching.
 
@@ -22,6 +38,9 @@ Apply the scope filter (owner, industry, window) after fetching.
 Use today's date as the reference. Bucket each opportunity by its expected close month.
 
 - **Pipeline**: per month and per stage — count, total expected value, and weighted value (expected value × win probability; use the opportunity's weighted value when it has one).
+- **REVI**: each opportunity's `Revi` — Concierge's proprietary 0–10 opportunity score (7+ strong, under 4 weak). Use it
+  to pressure-test the numbers: high-REVI deals sitting in early stages are upside to pull forward; low-REVI deals in
+  commit are risk. Report the value-weighted average REVI per month.
 - **Commit vs. upside**: *commit* = NEGOTIATION with win probability ≥ 70%; *best case* = commit + PROPOSAL; *pipeline* = everything.
 - **Hygiene**: opportunities whose close date has already passed (stale records), and large opportunities (top 10% by value) still in INITIAL CONTACT or QUALIFICATION within 30 days of close.
 - **Delivery demand vs. supply**: from the roles on commit and best-case opportunities, the people needed by month (role title and level), against the people available now plus those rolling off active engagements before each opportunity's estimated start. Name the role types where demand exceeds supply.
@@ -32,11 +51,13 @@ Use today's date as the reference. Bucket each opportunity by its expected close
 ### Pipeline Forecast — [window]
 One line: [n] open opportunities · [total value] · [weighted value] weighted.
 
-**Forecast** — table: Month | Commit | Best case | Pipeline | Weighted.
+**Forecast** — table: Month | Commit | Best case | Pipeline | Weighted | Avg REVI (value-weighted). Render it as a chart too if the client supports one.
 
 **By stage** — table: Stage | Count | Value | Weighted | Avg win %.
 
 **Can we deliver it?** — table: Role type | Needed (commit / best case) | Available | Gap. Follow it with one sentence on the biggest constraint.
+
+**REVI watch** — the 3 highest-REVI opportunities not yet in commit (pull forward) and the lowest-REVI ones in commit (at risk).
 
 **Needs attention** — stale close dates, big early-stage deals near close, concentration risk. Name each opportunity.
 
@@ -44,4 +65,4 @@ One line: [n] open opportunities · [total value] · [weighted value] weighted.
 
 Note that weighted values are only as good as the win probabilities in the records.
 
-Offer next steps: `/concierge:deal-review` on any focus opportunity, or `/concierge:sellable-capacity` to see what the bench can take on.
+Offer next steps: `/concierge:pursuit-qualifier` on any focus opportunity, or `/concierge:sellable-capacity` to see what the bench can take on.
