@@ -13,85 +13,44 @@ An installable Claude Code plugin for AI-powered staffing and resource managemen
 | Skill | `/concierge:evaluate-lineup` | Comprehensive team evaluation |
 | Skill | `/concierge:check-availability` | Consultant availability lookup |
 | Skill | `/concierge:pipeline` | Pipeline overview and resource conflict analysis |
+| Skill | `/concierge:account-brief` | Sales: internal client brief before a meeting or QBR |
+| Skill | `/concierge:deal-review` | Sales: qualify an opportunity — staffing readiness, estimated margin, verdict |
+| Skill | `/concierge:forecast` | Sales: weighted pipeline forecast vs. delivery capacity |
+| Skill | `/concierge:expansion-plays` | Sales: extensions, renewals, re-engagement and cross-sell targets |
+| Skill | `/concierge:sellable-capacity` | Sales: what the bench can take on, by skill and start date |
 | Agent | `@concierge:talent-scout` | Researches candidates for one role (spawned by `/staff`) |
 | Agent | `@concierge:team-evaluator` | Evaluates a lineup (spawned by `/staff` and `/evaluate-lineup`) |
 | Agent | `@concierge:pipeline-analyst` | Analyses resource allocation (spawned by `/pipeline`) |
-| MCP | `Consultants` | Connects to `Concierge.Services.MCP` at `http://localhost:5000` |
+| MCP | `Concierge by ProServe Metrics` | The Concierge MCP server, through its sign-in gateway |
 
 ---
 
 ## Prerequisites
 
-1. **Claude Code** (Desktop app or CLI) — download from [claude.ai/download](https://claude.ai/download)
-2. **Concierge MCP server** running locally (see below)
-3. **Claude Code v2.1.198+** recommended (background subagents run concurrently by default)
+1. **Claude Code** (Desktop app or CLI) — download from [claude.ai/download](https://claude.ai/download), v2.1.198+ recommended (background subagents run concurrently by default)
+2. A **ProServe Metrics work account** with Concierge access (your Concierge roles decide what data you can see)
 
 ---
 
-## Step 1 — Start the MCP server
+## Step 1 — Install the plugin
 
-From the `moneyball-services` directory:
-
-```bash
-dotnet run --project MCP/Concierge.Services.MCP.csproj
+```
+/plugin marketplace add ProServ-Metrics/concierge-claude-plugin
+/plugin install concierge@concierge-demo
 ```
 
-The server starts on `http://localhost:5000` by default.
+## Step 2 — Sign in
 
-**To run without authentication** (for local development), set in `appsettings.Development.json`:
-```json
-{
-  "Authorization": {
-    "Enabled": false
-  }
-}
-```
+Run `/mcp`, select **Concierge by ProServe Metrics**, and choose **Authenticate**. A browser opens:
 
-**To run with Entra ID authentication** (production), the server will return OAuth metadata on first connection. Claude Code will open a browser window to authenticate. Use your org credentials.
+1. **Allow** the connection on the Concierge page (asked once per device).
+2. Sign in with your work account.
 
-Verify the server is reachable:
-```bash
-curl -i http://localhost:5000
-# Should return 200 or 401 (not connection refused)
-```
+The browser then says you can close it. Start a new conversation (or `/clear`) so the Concierge tools load from the start.
 
----
+## Step 3 — Verify
 
-## Step 2 — Load the plugin
-
-### Option A: CLI (recommended for dev)
-
-```bash
-cd /path/to/moneyball-services
-claude --plugin-dir ./Plugins/Claude
-```
-
-### Option B: Desktop app
-
-1. Open Claude Desktop → Code tab
-2. Click **+** → **Plugins** → **Add plugin**
-3. Browse to `moneyball-services/Plugins/Claude`
-
-### Option C: Install to personal plugins (persists across sessions)
-
-```bash
-claude plugin install ./Plugins/Claude
-```
-
----
-
-## Step 3 — Verify the plugin loaded
-
-In Claude Code, run:
-```
-/help
-```
-You should see the `concierge` namespace with all 5 skills listed.
-
-Or check plugins directly:
-```
-/plugin list
-```
+Run `/help` — the `concierge` namespace lists the skills — or ask *"who's on the bench next month?"*.
 
 ---
 
@@ -148,6 +107,18 @@ Or for a specific opportunity:
 
 ---
 
+### Sales skills
+
+```
+/concierge:account-brief Atlantic Shipping Co
+/concierge:deal-review OPP-2024-002
+/concierge:forecast next quarter
+/concierge:expansion-plays
+/concierge:sellable-capacity next 8 weeks
+```
+
+All five are internal views (they include ratings, costs or individual availability) — share client-facing material through `/concierge:build-proposal` instead.
+
 ## Watching parallel scouts run (Desktop)
 
 In the Claude Desktop app:
@@ -164,23 +135,10 @@ This confirms the parallel execution is working.
 
 ### "No tools available" or MCP connection errors
 
-The Consultants MCP server is not reachable. Check:
-- Server is running: `curl -i http://localhost:5000`
-- Port matches `.mcp.json` (default: 5000)
-- If using auth, Entra ID credentials are valid
-
-To change the MCP server URL, edit `.mcp.json`:
-```json
-{
-  "mcpServers": {
-    "Consultants": {
-      "type": "http",
-      "url": "http://your-server:port"
-    }
-  }
-}
-```
-Then run `/reload-plugins`.
+- Run `/mcp`: if **Concierge by ProServe Metrics** isn't connected, choose **Authenticate** (or **Reconnect**).
+- Signed in but no tools in the conversation: start a new one (or `/clear`) — tools from a server you sign into
+  mid-conversation don't always load into it.
+- "Access denied" after signing in: your account needs a Concierge role — ask a Concierge admin.
 
 ### Scouts return no candidates
 
@@ -198,8 +156,13 @@ In Claude Code:
 ### Authentication pop-up not appearing
 
 - In Desktop: ensure you are on a Local session (not Remote/Cloud)
-- The OAuth flow requires a browser — ensure Claude Desktop has permission to open one
-- Check that `Authorization:Enabled` in the server's appsettings matches your environment
+- The OAuth flow requires a browser — ensure Claude has permission to open one
+
+## Developing the plugin
+
+Run the MCP server locally (`dotnet run --project MCP/Concierge.Services.MCP.csproj` in moneyball-services; in
+Development, `Authorization:Enabled` is false), point `.mcp.json` at `http://localhost:5000`, and load the plugin from
+source with `claude --plugin-dir ./Plugins/Claude`. Skills and agents are generated from `prompts/` by `prompts/dist.sh`.
 
 ---
 
@@ -221,7 +184,7 @@ Plugins/Claude/
 │   └── pipeline-analyst.md  ← @concierge:pipeline-analyst
 ├── hooks/
 │   └── hooks.json           ← PostToolUse: MCP error hint
-└── .mcp.json                ← Consultants server at localhost:5000
+└── .mcp.json                ← the Concierge MCP server (through its sign-in gateway)
 ```
 
 ---

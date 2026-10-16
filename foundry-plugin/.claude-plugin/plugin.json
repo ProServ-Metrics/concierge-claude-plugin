@@ -1,7 +1,7 @@
 {
   "name": "concierge-foundry",
   "description": "AI-powered staffing via Azure AI Foundry hosted agents. Parallel talent scouts run server-side — staff opportunities, evaluate lineups, and analyze the pipeline.",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "author": {
     "name": "Moneyball"
   }
