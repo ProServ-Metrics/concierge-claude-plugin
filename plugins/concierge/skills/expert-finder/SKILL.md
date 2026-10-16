@@ -62,21 +62,37 @@ the ones the Concierge app uses:
 
 Show the score to two decimals with its band, for example "1.31 (Above Average)". Ignore `CalculationTimestamp`.
 
+## Getting the data — fewest, smallest calls
+
+- **Batch, never loop.** For several people, one call covers them all: `list_employees` (`ids` plus `fields`),
+  `get_employees_dir_scores`, `get_employees_availability_for_period`, `get_employees_financial_data`. Never call
+  `get_employee_by_id` or another single-person tool once per person when a batch tool covers it.
+- **Parallel by default.** Calls that don't need each other's results go out together, in one round. "In parallel"
+  below means one message with all of those calls.
+- **Only what you'll use.** Pass `fields` (`list_employees`, `list_engagements_by_status`, `list_opportunities`),
+  `technicalSkillKeys` on `get_employee_technical_skills`, and `includeEngagements: false` on `list_clients`. For one
+  opportunity, use `get_opportunity_by_id` (it includes roles and required skills) rather than listing them all.
+- **Once per run.** Fetch reference lists (`list_technical_skills`, `list_clients`) once; reuse earlier results and
+  filter lists yourself rather than calling again.
+- **Cap the deep dives.** Tools with no batch version (`get_employee_technical_skills`, `get_engagement_by_id`,
+  `get_employee_engagement_role_assignments`) are only for the shortlist the steps name (8 at most unless a step says
+  otherwise), after narrowing with list calls, all in one parallel round.
+
 ## Data gathering
 
 **Round 1 — in parallel:**
 1. `list_technical_skills` — map the topic to skill keys (exact names or obvious synonyms; say which words matched
    nothing).
-2. `list_clients` with `includeEngagements: false` — client industries, if the request names an industry.
+2. `list_clients` with `includeEngagements: false` — client industries, only if the request names an industry.
 
 **Round 2:**
 3. `list_employees_with_technical_skills_by_skill_keys` with those keys, `deliveryOnly: true` — the holders.
 
-**Round 3 — for the strongest 8 holders (highest skill score first), in parallel:**
-4. `get_employee_technical_skills` with `technicalSkillKeys` set to the matched keys — each person's evidence for those skills (`engagementSources`: engagements,
-   roles, hours, dates; `certificationSources`).
-5. `get_employee_by_id` with `fields: "Basic,SoftSkills"` — their scored soft skills (Communication, Presentation
-   Skills, Presentation Experience, …, 0–10).
+**Round 3 — for the strongest 8 holders (highest skill score first), all in one parallel round:**
+4. `get_employee_technical_skills` with `technicalSkillKeys` set to the matched keys, one call per person — each
+   person's evidence for those skills (`engagementSources`: engagements, roles, hours, dates; `certificationSources`).
+5. `list_employees` with all 8 `ids` and `fields: "Basic,SoftSkills"` — one call: their scored soft skills
+   (Communication, Presentation Skills, Presentation Experience, …, 0–10). Never `get_employee_by_id` per person.
 6. `get_employees_dir_scores` (comma-separated IDs, one call) — each person's **DIR**.
 7. `get_employees_availability_for_period` (comma-separated IDs, one call) for the window — their **CSOT**.
 

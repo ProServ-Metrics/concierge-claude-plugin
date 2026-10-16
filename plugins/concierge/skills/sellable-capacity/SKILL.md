@@ -50,17 +50,37 @@ clients without them):
   table.
 - **Next steps** — end by offering 2–3 relevant next actions, as a choice (AskUserQuestion) when available.
 
+## Getting the data — fewest, smallest calls
+
+- **Batch, never loop.** For several people, one call covers them all: `list_employees` (`ids` plus `fields`),
+  `get_employees_dir_scores`, `get_employees_availability_for_period`, `get_employees_financial_data`. Never call
+  `get_employee_by_id` or another single-person tool once per person when a batch tool covers it.
+- **Parallel by default.** Calls that don't need each other's results go out together, in one round. "In parallel"
+  below means one message with all of those calls.
+- **Only what you'll use.** Pass `fields` (`list_employees`, `list_engagements_by_status`, `list_opportunities`),
+  `technicalSkillKeys` on `get_employee_technical_skills`, and `includeEngagements: false` on `list_clients`. For one
+  opportunity, use `get_opportunity_by_id` (it includes roles and required skills) rather than listing them all.
+- **Once per run.** Fetch reference lists (`list_technical_skills`, `list_clients`) once; reuse earlier results and
+  filter lists yourself rather than calling again.
+- **Cap the deep dives.** Tools with no batch version (`get_employee_technical_skills`, `get_engagement_by_id`,
+  `get_employee_engagement_role_assignments`) are only for the shortlist the steps name (8 at most unless a step says
+  otherwise), after narrowing with list calls, all in one parallel round.
+
 ## Data gathering
 
 **Round 1 — in parallel:**
 1. `list_available_employees` with `minimumPercentageAvailable: 25` — who has capacity now.
 2. `list_engagements_by_status` with `statuses: ["ACTIVE"]`, `fields: "Basic"` — engagements ending inside the window free their people up.
 3. `list_opportunities` with `opportunityStages: ["PROPOSAL", "NEGOTIATION"]` and `fields: "Basic,Roles"` — demand that's likely to land and will claim some of this capacity.
+4. If a skill area was given, `list_employees_with_technical_skills_by_skill_name` with those skills — keep only matching people later.
 
-**Round 2:**
-4. For people coming free from engagements that end inside the window, `get_engagement_by_id` to see who they are (at most 8 engagements).
-5. `get_employees_availability_for_period` for everyone found (available now plus rolling off), across the window — their actual free hours by week.
-6. If a skill area was given, `list_employees_with_technical_skills_by_skill_name` with those skills, and keep only matching people. Otherwise group people by title and level. Fetch `get_employee_technical_skills` for at most 15 people, to name each group's standout skills.
+**Round 2 — in parallel:** `get_engagement_by_id`, one call each, for the engagements that end inside the window (at most 8) — who comes free from them.
+
+**Round 3 — in parallel, one call each for everyone found** (available now plus rolling off):
+5. `get_employees_availability_for_period` across the window — their actual free hours by week.
+6. `list_employees` with their `ids` and `fields: "Basic,TechnicalSkills"` — each person's title and scored skills, to
+   group them (by skill area, or by title and level) and name each group's standout skills. Don't call
+   `get_employee_technical_skills` per person for this.
 
 ## Analysis
 

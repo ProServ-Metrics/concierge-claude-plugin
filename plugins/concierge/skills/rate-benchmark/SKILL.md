@@ -63,21 +63,39 @@ the ones the Concierge app uses:
 
 Show the score to two decimals with its band, for example "1.31 (Above Average)". Ignore `CalculationTimestamp`.
 
+## Getting the data — fewest, smallest calls
+
+- **Batch, never loop.** For several people, one call covers them all: `list_employees` (`ids` plus `fields`),
+  `get_employees_dir_scores`, `get_employees_availability_for_period`, `get_employees_financial_data`. Never call
+  `get_employee_by_id` or another single-person tool once per person when a batch tool covers it.
+- **Parallel by default.** Calls that don't need each other's results go out together, in one round. "In parallel"
+  below means one message with all of those calls.
+- **Only what you'll use.** Pass `fields` (`list_employees`, `list_engagements_by_status`, `list_opportunities`),
+  `technicalSkillKeys` on `get_employee_technical_skills`, and `includeEngagements: false` on `list_clients`. For one
+  opportunity, use `get_opportunity_by_id` (it includes roles and required skills) rather than listing them all.
+- **Once per run.** Fetch reference lists (`list_technical_skills`, `list_clients`) once; reuse earlier results and
+  filter lists yourself rather than calling again.
+- **Cap the deep dives.** Tools with no batch version (`get_employee_technical_skills`, `get_engagement_by_id`,
+  `get_employee_engagement_role_assignments`) are only for the shortlist the steps name (8 at most unless a step says
+  otherwise), after narrowing with list calls, all in one parallel round.
+
 ## Data gathering
 
 **Round 1 — in parallel:**
-1. The roles to price: from an opportunity, `list_opportunities` with `fields: "Basic,Roles,RoleRequiredTechnicalSkills"`
-   (each role's title, level, hours, quoted bill rate and required skills); from free text, the roles and skills named.
+1. The roles to price: from an opportunity, `get_opportunity_by_id` (each role's title, level, hours, quoted bill rate
+   and required skills); from free text, the roles and skills named.
 2. `list_technical_skills` — skill keys for the roles' skills.
 3. `list_engagements_by_status` with `statuses: ["COMPLETED", "ACTIVE"]`, `fields: "Basic"` — the engagement list, with each
    engagement's `RequiredSkills`, client and industry to pick comparables from (bill rates come from each engagement's
    detail, not this list).
 
-**Round 2 — billed rates:** `get_engagement_by_id` for up to 15 engagements whose work matches the roles' skills (most
-recent first). Each engagement's `TeamMembers` carry the role, skills and **bill rate** actually used.
+**Round 2 — billed rates (in parallel):** `get_engagement_by_id`, one call each, for up to 15 engagements whose work
+matches the roles' skills (most recent first). Each engagement's `TeamMembers` carry the role, skills and **bill rate**
+actually used.
 
-**Round 3 — cost (future feature):** for the people who held those roles (at most 15), `get_employees_financial_data`
-(their current hourly cost) and `get_employees_dir_scores` (their **DIR**).
+**Round 3 — cost (future feature), in parallel:** for the people who held those roles (at most 15),
+`get_employees_financial_data` (their current hourly cost) and `get_employees_dir_scores` (their **DIR**) — one call
+each for all of them.
 
 ## Analysis
 

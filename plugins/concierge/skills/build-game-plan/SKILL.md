@@ -30,20 +30,35 @@ seller, delivery lead or executive.
 - **Gaps in a sentence.** When data is missing or thin, say what's missing and what you did instead, in one or two
   plain sentences. Don't speculate about the database.
 
-## Data gathering — run these MCP calls in parallel
+## Getting the data — fewest, smallest calls
 
+- **Batch, never loop.** For several people, one call covers them all: `list_employees` (`ids` plus `fields`),
+  `get_employees_dir_scores`, `get_employees_availability_for_period`, `get_employees_financial_data`. Never call
+  `get_employee_by_id` or another single-person tool once per person when a batch tool covers it.
+- **Parallel by default.** Calls that don't need each other's results go out together, in one round. "In parallel"
+  below means one message with all of those calls.
+- **Only what you'll use.** Pass `fields` (`list_employees`, `list_engagements_by_status`, `list_opportunities`),
+  `technicalSkillKeys` on `get_employee_technical_skills`, and `includeEngagements: false` on `list_clients`. For one
+  opportunity, use `get_opportunity_by_id` (it includes roles and required skills) rather than listing them all.
+- **Once per run.** Fetch reference lists (`list_technical_skills`, `list_clients`) once; reuse earlier results and
+  filter lists yourself rather than calling again.
+- **Cap the deep dives.** Tools with no batch version (`get_employee_technical_skills`, `get_engagement_by_id`,
+  `get_employee_engagement_role_assignments`) are only for the shortlist the steps name (8 at most unless a step says
+  otherwise), after narrowing with list calls, all in one parallel round.
+
+## Data gathering
+
+**Round 1 — in parallel:**
 1. **Get Opportunity Details** — full opportunity: client, description, roles, required skills, proposed dates.
 2. **Get Client Details** — client history, past engagements, any CSAT or notes.
-3. **List Engagements By Status** (completed + active) — for safety net analysis.
-4. **List Employees With Matching Technical Skills** — all employees with the required skills, for backup roster.
-5. **Get All Employees DIR Scores** — for ranking backup candidates.
+3. **List Engagements By Status** (completed + active, `fields: "Basic"`) — for safety net analysis.
+4. **Get All Employees DIR Scores** — for ranking backup candidates, and the assigned people's DIR (no per-person DIR call).
 
-Then for each proposed role assignment:
-- **Get Employee Information**
-- **Get Employee Technical Skills**
-- **Get Employee Engagement Role Assignments**
-- **Get Employee DIR Score**
-- **Get Employees Availability for Period** (for the engagement dates)
+**Round 2 — in parallel:**
+5. **List Employees With Matching Technical Skills** — one call with all the roles' required skills, for the backup roster.
+6. **Get Employees** — one call with all the assigned people's IDs and `fields: "Basic,Organization,Strengths,DISC,SoftSkills,TechnicalSkills"`.
+7. **Get Employees Availability for Period** — one call with all the assigned people's IDs, for the engagement dates.
+8. Per assigned person (one call each, no batch version): **Get Employee Technical Skills** with `technicalSkillKeys` set to their role's required skills, and **Get Employee Engagement Role Assignments**.
 
 ## Analysis before writing
 

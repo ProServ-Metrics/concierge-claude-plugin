@@ -48,13 +48,30 @@ clients without them):
   table.
 - **Next steps** — end by offering 2–3 relevant next actions, as a choice (AskUserQuestion) when available.
 
-## Data gathering — in parallel
+## Getting the data — fewest, smallest calls
 
+- **Batch, never loop.** For several people, one call covers them all: `list_employees` (`ids` plus `fields`),
+  `get_employees_dir_scores`, `get_employees_availability_for_period`, `get_employees_financial_data`. Never call
+  `get_employee_by_id` or another single-person tool once per person when a batch tool covers it.
+- **Parallel by default.** Calls that don't need each other's results go out together, in one round. "In parallel"
+  below means one message with all of those calls.
+- **Only what you'll use.** Pass `fields` (`list_employees`, `list_engagements_by_status`, `list_opportunities`),
+  `technicalSkillKeys` on `get_employee_technical_skills`, and `includeEngagements: false` on `list_clients`. For one
+  opportunity, use `get_opportunity_by_id` (it includes roles and required skills) rather than listing them all.
+- **Once per run.** Fetch reference lists (`list_technical_skills`, `list_clients`) once; reuse earlier results and
+  filter lists yourself rather than calling again.
+- **Cap the deep dives.** Tools with no batch version (`get_employee_technical_skills`, `get_engagement_by_id`,
+  `get_employee_engagement_role_assignments`) are only for the shortlist the steps name (8 at most unless a step says
+  otherwise), after narrowing with list calls, all in one parallel round.
+
+## Data gathering
+
+**Round 1 — in parallel:**
 1. `list_clients` with `includeEngagements: false` — the client base (or just the named client via `get_client_by_id`).
 2. `list_engagements_by_status` with `statuses: ["ACTIVE", "COMPLETED"]`, `fields: "Basic"` — the engagement history.
-3. `list_opportunities` (all open stages, `fields: "Basic"`) — what's already being pursued, so it isn't proposed twice.
+3. `list_opportunities` with `opportunityStages: ["INITIAL CONTACT", "QUALIFICATION", "PROPOSAL", "NEGOTIATION"]`, `fields: "Basic"` — what's already being pursued, so it isn't proposed twice.
 
-For the shortlisted plays only (at most 8 engagements), call `get_engagement_by_id` for satisfaction, progress and the team.
+**Round 2 — in parallel:** `get_engagement_by_id`, one call each, for the shortlisted plays only (at most 8 engagements) — satisfaction, progress and the team.
 
 ## Plays to look for
 

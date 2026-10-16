@@ -7,17 +7,34 @@ argument-hint: "opportunity ID (e.g. OPP-2025-042)"
 
 Build a polished, client-facing proposal document for opportunity **$ARGUMENTS**.
 
-## Data gathering — run these MCP calls in parallel
+## Getting the data — fewest, smallest calls
 
+- **Batch, never loop.** For several people, one call covers them all: `list_employees` (`ids` plus `fields`),
+  `get_employees_dir_scores`, `get_employees_availability_for_period`, `get_employees_financial_data`. Never call
+  `get_employee_by_id` or another single-person tool once per person when a batch tool covers it.
+- **Parallel by default.** Calls that don't need each other's results go out together, in one round. "In parallel"
+  below means one message with all of those calls.
+- **Only what you'll use.** Pass `fields` (`list_employees`, `list_engagements_by_status`, `list_opportunities`),
+  `technicalSkillKeys` on `get_employee_technical_skills`, and `includeEngagements: false` on `list_clients`. For one
+  opportunity, use `get_opportunity_by_id` (it includes roles and required skills) rather than listing them all.
+- **Once per run.** Fetch reference lists (`list_technical_skills`, `list_clients`) once; reuse earlier results and
+  filter lists yourself rather than calling again.
+- **Cap the deep dives.** Tools with no batch version (`get_employee_technical_skills`, `get_engagement_by_id`,
+  `get_employee_engagement_role_assignments`) are only for the shortlist the steps name (8 at most unless a step says
+  otherwise), after narrowing with list calls, all in one parallel round.
+
+## Data gathering
+
+**Round 1 — in parallel:**
 1. **Get Opportunity Details** — fetch the full opportunity: client, description, engagement type, roles needed, required skills, proposed start/end dates.
 2. **Get Client Details** — fetch the client's industry, past engagements with the firm.
-3. **List Engagements By Status** (completed + active) — you'll filter for relevant ones in the next step.
-4. **List Employees With Matching Technical Skills** — using the technical skills from the opportunity roles, find all firm employees with those skills.
+3. **List Engagements By Status** (completed + active, `fields: "Basic,Description"`) — you'll filter for relevant ones in the next step.
+4. The experience graph's first-round calls below (**List Technical Skills**, **List Clients** without engagements).
 
-Then, for each proposed role assignment on the opportunity:
-- **Get Employee Information** for each assigned employee
-- **Get Employee Technical Skills** for each assigned employee
-- **Get Employee Engagement Role Assignments** for each assigned employee (to surface relevant prior experience)
+**Round 2 — in parallel:**
+5. **List Employees With Matching Technical Skills** — one call with all the technical skills from the opportunity roles, to find all firm employees with those skills.
+6. **Get Employees** — one call with all the assigned employees' IDs and `fields: "Basic,Organization,DISC,TechnicalSkills"`. Never **Get Employee Information** per person.
+7. Per assigned employee (one call each, no batch version): **Get Employee Technical Skills** with `technicalSkillKeys` set to their role's required skills, and **Get Employee Engagement Role Assignments** (to surface relevant prior experience).
 
 ## How to write
 
@@ -69,10 +86,11 @@ Concierge's skills are **derived from delivery evidence** — engagements, roles
 self-reported. Every person-skill carries the engagements behind it. Use that chain; never state a capability, a
 person's skill or a past engagement without the evidence for it.
 
-**1. Scope → skills.** Call `list_technical_skills` once (the full taxonomy: each skill has a key, a name and one
-category). Map the scope to skill keys:
-- From an **opportunity ID**: `list_opportunities` with `fields: "Basic,Roles,RoleRequiredTechnicalSkills"` and find the
-  opportunity — its roles list the required skill keys. (`get_opportunity_by_id` doesn't include roles.)
+**1. Scope → skills.** In one parallel round: `list_technical_skills` (the full taxonomy: each skill has a key, a name
+and one category), `list_clients` with `includeEngagements: false` (for step 4), and the opportunity if there is one.
+Map the scope to skill keys:
+- From an **opportunity ID**: `get_opportunity_by_id` — its roles list the required skills (match their names to keys
+  in the taxonomy when no key is given). Don't list every opportunity to find one.
 - From **free text**: match phrases to skill names (exact or obvious synonyms). Note which phrases matched nothing —
   report them as gaps rather than stretching a match.
 
@@ -84,12 +102,13 @@ category). Map the scope to skill keys:
 **3. Skills → people → engagements.** `list_employees_with_technical_skills_by_skill_keys` with the exact keys and
 `deliveryOnly: true` gives the holders and their scores. For the strongest holders (at most 8, highest skill score
 first), `get_employee_technical_skills` with `technicalSkillKeys` set to the keys you're matching returns those skills'
-evidence (always pass the keys: a person's full evidence is too large to read): `engagementSources` (role, dates, hours,
-engagement, client) and `certificationSources`. Collect the engagements those sources name. When exact matches are thin
-(fewer than 3 engagements), repeat for the co-occurring and same-category skills, tagging each engagement with its tier.
+evidence: `engagementSources` (role, dates, hours, engagement, client) and `certificationSources`. It's one call per
+person (no batch version), so send them all in one parallel round, and always pass the keys: a person's full evidence
+is too large to read. Collect the engagements those sources name. When exact matches are thin (fewer than 3
+engagements), repeat for the co-occurring and same-category skills, tagging each engagement with its tier.
 
-**4. Industry.** `list_clients` with `includeEngagements: false` once gives every client's `Industry`; take each
-engagement's industry from its client.
+**4. Industry.** The `list_clients` result from step 1 gives every client's `Industry`; take each engagement's
+industry from its client.
 
 **5. Rank.** Exact before co-occurring before same category; then industry match (if the scope has one); then recency
 (latest role end date); then volume (hours, people involved).
