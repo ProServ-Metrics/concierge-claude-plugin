@@ -20,8 +20,9 @@ seller, delivery lead or executive.
   "EngagementID", "list_clients"). Write "years of experience", "hours on delivered work", "win probability". An ID
   the user typed themselves (e.g. an opportunity ID) can be echoed back once.
 - **Linked names.** When the Concierge server gives a link format (in its instructions or at the end of a tool result), write each person, client,
-  engagement and opportunity name as a link to it in Concierge (first mention per section). Leave links out of
-  anything written for a client.
+  engagement, opportunity and technical skill name as a link to it in Concierge (first mention per section). A board,
+  lineup or evaluation is linked with the `link` its tool result gives, as it is - never an address you build. Leave
+  links out of anything written for a client.
 - **No guessed pronouns.** Refer to people by name or "they"; never infer pronouns from a name ("Why them", not
   "Why her").
 - **Succinct.** Lead with the answer. Prefer a short table or tight bullets to paragraphs. Skip preamble and closing
@@ -43,7 +44,9 @@ seller, delivery lead or executive.
 Use the host's built-in tools when they exist, and fall back to plain text when they don't (this skill also runs in
 clients without them):
 - **Choices** — when the user has to pick (which opportunity, which client, which option), use the AskUserQuestion tool
-  if available: short labels, one-line descriptions. Otherwise list numbered options in text.
+  if available: short labels, one-line descriptions. Otherwise list numbered options in text. Ask several questions
+  together only when each stands on its own: one that matters only for some answers to another waits - ask the
+  deciding question alone, then the follow-up only if the answer calls for it.
 - **Progress** — for work with several rounds of calls, keep a live task list with the TodoWrite tool if available
   (one item per round, marked in progress and done as you go). Otherwise skip it — don't narrate.
 - **Collateral** — when the output is something to share or keep (a brief, a proposal, bios), offer to save it as a
@@ -55,8 +58,8 @@ clients without them):
 - **Next steps** — end by offering 2–3 relevant next actions, as a choice (AskUserQuestion) when available.
 
 **Reading DIR.** `get_employees_dir_scores` returns `CompleteScore` (use this as the person's DIR) and
-`OperationalScore`. DIR is measured against replacement level, which is 0, so it is not a 0–10 score. The bands are
-the ones the Concierge app uses:
+`OperationalScore`. DIR runs from -5 to +5, measured against replacement level (0), so it is not a 0–10 score. The
+bands are the ones the Concierge app uses:
 - 2.0 and up: Exceptional
 - 0.25 to 2.0: Above Average
 - -0.5 to 0.25: Average

@@ -17,8 +17,9 @@ seller, delivery lead or executive.
   "EngagementID", "list_clients"). Write "years of experience", "hours on delivered work", "win probability". An ID
   the user typed themselves (e.g. an opportunity ID) can be echoed back once.
 - **Linked names.** When the Concierge server gives a link format (in its instructions or at the end of a tool result), write each person, client,
-  engagement and opportunity name as a link to it in Concierge (first mention per section). Leave links out of
-  anything written for a client.
+  engagement, opportunity and technical skill name as a link to it in Concierge (first mention per section). A board,
+  lineup or evaluation is linked with the `link` its tool result gives, as it is - never an address you build. Leave
+  links out of anything written for a client.
 - **No guessed pronouns.** Refer to people by name or "they"; never infer pronouns from a name ("Why them", not
   "Why her").
 - **Succinct.** Lead with the answer. Prefer a short table or tight bullets to paragraphs. Skip preamble and closing

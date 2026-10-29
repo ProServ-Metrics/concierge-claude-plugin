@@ -1,6 +1,6 @@
 ---
 name: "experience-match"
-description: "Answer \"have we done this before?\" with evidence: the firm's delivered engagements that match a scope or opportunity, ranked exact / adjacent, with who delivered them, the bench depth behind each skill, gaps, and an RFP-ready paragraph. Never overclaims."
+description: "Answer \"have we done this before?\" with evidence: the firm's delivered engagements that match a scope or opportunity, ranked exact / adjacent, with who delivered them, the talent pool behind each skill, gaps, and an RFP-ready paragraph. Never overclaims."
 argument-hint: "[scope description or opportunity ID]"
 when_to_use: "have we done this before, have we done X, similar work, past experience, track record, case studies, RFP experience section, proof points, references for this kind of work"
 ---
@@ -22,8 +22,9 @@ seller, delivery lead or executive.
   "EngagementID", "list_clients"). Write "years of experience", "hours on delivered work", "win probability". An ID
   the user typed themselves (e.g. an opportunity ID) can be echoed back once.
 - **Linked names.** When the Concierge server gives a link format (in its instructions or at the end of a tool result), write each person, client,
-  engagement and opportunity name as a link to it in Concierge (first mention per section). Leave links out of
-  anything written for a client.
+  engagement, opportunity and technical skill name as a link to it in Concierge (first mention per section). A board,
+  lineup or evaluation is linked with the `link` its tool result gives, as it is - never an address you build. Leave
+  links out of anything written for a client.
 - **No guessed pronouns.** Refer to people by name or "they"; never infer pronouns from a name ("Why them", not
   "Why her").
 - **Succinct.** Lead with the answer. Prefer a short table or tight bullets to paragraphs. Skip preamble and closing
@@ -45,7 +46,9 @@ seller, delivery lead or executive.
 Use the host's built-in tools when they exist, and fall back to plain text when they don't (this skill also runs in
 clients without them):
 - **Choices** — when the user has to pick (which opportunity, which client, which option), use the AskUserQuestion tool
-  if available: short labels, one-line descriptions. Otherwise list numbered options in text.
+  if available: short labels, one-line descriptions. Otherwise list numbered options in text. Ask several questions
+  together only when each stands on its own: one that matters only for some answers to another waits - ask the
+  deciding question alone, then the follow-up only if the answer calls for it.
 - **Progress** — for work with several rounds of calls, keep a live task list with the TodoWrite tool if available
   (one item per round, marked in progress and done as you go). Otherwise skip it — don't narrate.
 - **Collateral** — when the output is something to share or keep (a brief, a proposal, bios), offer to save it as a
@@ -134,16 +137,34 @@ engagements delivering the closest work: …". Name the gap when there is one.
 - Who delivered it: name, role and hours for the key people
 
 **Depth behind it** — for each scope skill: how many people hold it, how many engagements and hours evidence it, and
-how recent the latest is. This is the "bench behind the team" story; numbers only from the tools.
+how recent the latest is. This is the "talent pool behind the team" story; numbers only from the tools.
 
 **Gaps** — scope phrases that matched no skill, or skills with thin evidence (under 3 engagements).
 
 **RFP-ready paragraph** — 4–6 sentences a seller can paste: the experience claim at the strength the evidence supports,
 two or three named engagements as proof (offer client-anonymized wording — e.g. "a regional healthcare system" — in a
-second version), and the depth of the bench. Nothing the evidence above doesn't support.
+second version), and the depth of the talent pool. Nothing the evidence above doesn't support.
 
 Close with what the evidence is: "Every engagement and skill above comes from delivery records — engagements, roles,
 hours and certifications — not self-reported profiles."
+
+## The board
+
+Groups: **Strongest Proof** (the matching engagements, strongest first; note what was delivered and whether it's an
+exact or adjacent match) · **Who Delivered It** (the key people; note their role and hours) · **Clients** (only when
+the scope names a client or an industry: the clients of the proof engagements).
+
+## Offer a board
+
+Don't create one unprompted. End by offering to set the result up as a board in Concierge - a board of these cards
+the account team can open and work on - in the next-steps choice. Only if the user says yes, call `create_board`:
+- **title:** what it's about - the client and the opportunity or topic (e.g. "OhioHealth - Snowflake experts")
+- **groups:** the ones listed above, in that order (leave out a group with nothing in it; a person, client, engagement
+  or opportunity appears once, in the first group that fits), every card with a short `note` on why it's there
+- **summary:** a few lines for the board's first message: what it is and the headline finding, in plain business
+  language (names, not IDs). If the work started from a document the user shared (an RFP, a brief), name it there - the
+  board can't hold the file itself
+Then give the user the link.
 
 Offer next steps: `/concierge:expert-finder` for who to bring to the conversation, `/concierge:pursuit-qualifier` if
 it's a live opportunity, or `/concierge:build-proposal` to carry this into a proposal.

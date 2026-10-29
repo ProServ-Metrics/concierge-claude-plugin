@@ -24,8 +24,9 @@ seller, delivery lead or executive.
   "EngagementID", "list_clients"). Write "years of experience", "hours on delivered work", "win probability". An ID
   the user typed themselves (e.g. an opportunity ID) can be echoed back once.
 - **Linked names.** When the Concierge server gives a link format (in its instructions or at the end of a tool result), write each person, client,
-  engagement and opportunity name as a link to it in Concierge (first mention per section). Leave links out of
-  anything written for a client.
+  engagement, opportunity and technical skill name as a link to it in Concierge (first mention per section). A board,
+  lineup or evaluation is linked with the `link` its tool result gives, as it is - never an address you build. Leave
+  links out of anything written for a client.
 - **No guessed pronouns.** Refer to people by name or "they"; never infer pronouns from a name ("Why them", not
   "Why her").
 - **Succinct.** Lead with the answer. Prefer a short table or tight bullets to paragraphs. Skip preamble and closing
@@ -47,7 +48,9 @@ seller, delivery lead or executive.
 Use the host's built-in tools when they exist, and fall back to plain text when they don't (this skill also runs in
 clients without them):
 - **Choices** — when the user has to pick (which opportunity, which client, which option), use the AskUserQuestion tool
-  if available: short labels, one-line descriptions. Otherwise list numbered options in text.
+  if available: short labels, one-line descriptions. Otherwise list numbered options in text. Ask several questions
+  together only when each stands on its own: one that matters only for some answers to another waits - ask the
+  deciding question alone, then the follow-up only if the answer calls for it.
 - **Progress** — for work with several rounds of calls, keep a live task list with the TodoWrite tool if available
   (one item per round, marked in progress and done as you go). Otherwise skip it — don't narrate.
 - **Collateral** — when the output is something to share or keep (a brief, a proposal, bios), offer to save it as a
@@ -59,8 +62,8 @@ clients without them):
 - **Next steps** — end by offering 2–3 relevant next actions, as a choice (AskUserQuestion) when available.
 
 **Reading DIR.** `get_employees_dir_scores` returns `CompleteScore` (use this as the person's DIR) and
-`OperationalScore`. DIR is measured against replacement level, which is 0, so it is not a 0–10 score. The bands are
-the ones the Concierge app uses:
+`OperationalScore`. DIR runs from -5 to +5, measured against replacement level (0), so it is not a 0–10 score. The
+bands are the ones the Concierge app uses:
 - 2.0 and up: Exceptional
 - 0.25 to 2.0: Above Average
 - -0.5 to 0.25: Average
@@ -101,6 +104,17 @@ Show the score to two decimals with its band, for example "1.31 (Above Average)"
    history at the firm and its industry as unknown; ask the user for the industry if the fit depends on it. Mention
    the missing record once as a data note, not as a deal risk.
 3. `list_engagements_by_status` with `statuses: ["ACTIVE", "COMPLETED"]`, `fields: "Basic"` — the client's history with the firm.
+
+Also in round 1, `get_staffing_lineups` for the opportunity - a team already built and evaluated there answers "can we
+deliver it" better than candidates do:
+
+**Lineups on the staffing board.** An opportunity may already have delivery teams built and evaluated in Concierge.
+`get_staffing_lineups` lists them (who's in each role, the latest evaluation's score out of 10) with a `link` to each
+lineup and an `evaluationLink` to its evaluation. When the work is about an opportunity's team, check it once, and:
+- **Use the evaluated team:** the highest-scoring completed evaluation's lineup is the team the firm has settled on; say
+  which lineup it is, with its score, and link the lineup's name (and "its evaluation").
+- **Link, don't build:** use the links exactly as returned. Never build a lineup or evaluation address yourself.
+- **None yet:** say so in a line, and offer staffing it in Concierge.
 
 **Round 2 — comparable work:**
 
@@ -177,7 +191,7 @@ cites REVI and the evidence.
 
 **Recommended win theme** — one or two sentences built on that proof.
 
-**Suggested team & readiness** — table: Role | Required skills | Best candidate (why, from evidence) | DIR | CSOT in window.
+**Delivery readiness** — could we staff the work? Table: Role | Required skills | Best candidate to deliver it (why, from evidence) | DIR | CSOT in the delivery window. (Not the pursuit team - that's the pursuit board.)
 
 **Margin estimate** *(future feature)* — table: Role | Hours | Rate | Price | Est. cost | Margin %, with a total.
 
@@ -185,6 +199,24 @@ cites REVI and the evidence.
 
 Internal: DIR, CSOT and costs stay inside the firm.
 
-Offer next steps, leading with `/concierge:pursuit-workspace` ("set this pursuit up in Concierge, with the team, client
-profile and comparable work on a canvas"); then `/concierge:experience-match` for the full track record, `/concierge:build-proposal` for the client
+## The board
+
+Title it "[Client] - [Opportunity]", as a pursuit board would be, so setting the pursuit up later builds on it.
+Groups: **Opportunity Details** (the opportunity, then the client) · **Who Could Deliver It** (one per role; note the role
+and why, from the evidence) · **Comparable Engagements** (the strongest proof; note why it's relevant and how it went).
+
+## Offer a board
+
+Don't create one unprompted. End by offering to set the result up as a board in Concierge - a board of these cards
+the account team can open and work on - in the next-steps choice. Only if the user says yes, call `create_board`:
+- **title:** what it's about - the client and the opportunity or topic (e.g. "OhioHealth - Snowflake experts")
+- **groups:** the ones listed above, in that order (leave out a group with nothing in it; a person, client, engagement
+  or opportunity appears once, in the first group that fits), every card with a short `note` on why it's there
+- **summary:** a few lines for the board's first message: what it is and the headline finding, in plain business
+  language (names, not IDs). If the work started from a document the user shared (an RFP, a brief), name it there - the
+  board can't hold the file itself
+Then give the user the link.
+
+Offer next steps, leading with `/concierge:pursuit-team-builder` ("set this pursuit up in Concierge, with the team, client
+profile and comparable work on a board"); then `/concierge:experience-match` for the full track record, `/concierge:build-proposal` for the client
 document, or `/concierge:rate-benchmark` to sanity-check the pricing.
