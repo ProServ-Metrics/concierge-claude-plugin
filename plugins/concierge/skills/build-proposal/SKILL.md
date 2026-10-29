@@ -173,7 +173,8 @@ Note the Project Manager and key roles for each related engagement.
 **Team assessment**: For each proposed team member, identify:
 - Relevant certifications and technical skills
 - Prior engagements that are similar to this opportunity (type, skills, industry)
-- Whether they have worked directly with this client before
+- Whether they have worked directly with this client before, and how the client rated that work (the engagement's
+  client satisfaction in their role assignments)
 
 **DISC / soft skills**: Note each team member's DISC profile (if available in their profile data) and identify how the profiles are complementary.
 
@@ -239,8 +240,9 @@ Dynamics (it's about named people).
 **[Role Title] — [Employee Name]**
 - *Certifications & Technical Skills*: list the most relevant to this engagement
 - *Related Engagement Experience*: 2–3 bullet points on prior engagements most similar to this work
-- *Client/Industry Experience*: note any direct experience with this client, or experience in the client's industry
-- ⭐ *Has delivered for this client previously* — flag clearly if applicable
+- *Client/Industry Experience*: note direct experience with this client only where the client rated that work well
+  (4.0+), or experience in the client's industry. Never mention work this client rated poorly - this is their document
+- ⭐ *Has delivered for this client previously* — only for well-rated work (4.0+)
 
 #### Team Strengths
 Write 2–3 sentences on how the team's combined experience and skills are specifically suited for this engagement. Reference complementary skills across roles.

@@ -111,7 +111,7 @@ Show the score to two decimals with its band, for example "1.31 (Above Average)"
 ## Data gathering
 
 **Round 1, in parallel:**
-1. `get_opportunity_by_id`: the client, stage, value, close date, **REVI**, its roles' required skills and
+1. `get_opportunity_by_id`: the client, stage, value, close date, **POV**, its roles' required skills and
    `pursuitTeam` (the people already working the deal - may be empty; ids starting EMP are employees, the rest sales
    staff). From a document instead: its scope, skills and dates.
 2. `list_technical_skills`: to turn the required skill names into skill keys.
@@ -178,7 +178,7 @@ Call `create_board` with:
   logo; the client and topic for a call with no opportunity)
 - **groups:** as above.
 - **summary**: markdown for the board's first message, for the account team: one line on the opportunity (stage,
-  value, close date, REVI), then a short table (Pursuit role | Person | Why, from the evidence | CSOT), then one line
+  value, close date, POV), then a short table (Pursuit role | Person | Why, from the evidence | CSOT), then one line
   on the comparable work. Plain business language: names, not IDs. If it started from a document the user shared (an
   RFP, a brief), name it there - the board can't hold the file itself.
 

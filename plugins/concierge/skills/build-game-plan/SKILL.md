@@ -164,7 +164,10 @@ For each required role, the top 3–5 employees (not already assigned) ranked by
 | Rank | Employee | DIR Score | Key Relevant Skills/Certs | Relevant Prior Engagements |
 |------|----------|-----------|--------------------------|---------------------------|
 
-Flag anyone who has previously worked with this specific client with a ⭐.
+Star (⭐) anyone whose prior work with this client the client rated well (4.0+: the engagement's client satisfaction in
+their role assignments). Anyone whose prior work there was rated under 3.5 goes in the risks instead: who, the
+engagement, its rating and their role - a high risk if they led it or it was within two years - with a mitigation
+(someone else in the client-facing role, or a plan to reset the relationship).
 
 ## The board
 

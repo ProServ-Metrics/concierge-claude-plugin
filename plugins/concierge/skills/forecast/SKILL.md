@@ -93,9 +93,10 @@ active engagements ending inside the window (8 at most, soonest first) — who r
 Use today's date as the reference. Bucket each opportunity by its expected close month.
 
 - **Pipeline**: per month and per stage — count, total expected value, and weighted value (expected value × win probability; use the opportunity's weighted value when it has one).
-- **REVI**: each opportunity's `Revi` — Concierge's proprietary 0–10 opportunity score (7+ strong, under 4 weak). Use it
-  to pressure-test the numbers: high-REVI deals sitting in early stages are upside to pull forward; low-REVI deals in
-  commit are risk. Report the value-weighted average REVI per month.
+- **POV**: each opportunity's `Pov.Score` — Concierge's proprietary 0–10 Pipeline Opportunity Value: how closely the
+  deal matches the firm's ideal project (7+ strong, under 4 weak). Use it to pressure-test the numbers: high-POV deals
+  sitting in early stages are upside to pull forward; low-POV deals in commit are risk. Report the value-weighted
+  average POV per month.
 - **Commit vs. upside**: *commit* = NEGOTIATION with win probability ≥ 70%; *best case* = commit + PROPOSAL; *pipeline* = everything.
 - **Hygiene**: opportunities whose close date has already passed (stale records), and large opportunities (top 10% by value) still in INITIAL CONTACT or QUALIFICATION within 30 days of close.
 - **Delivery demand vs. supply**: from the roles on commit and best-case opportunities, the people needed by month (role title and level), against the people available now plus those rolling off active engagements before each opportunity's estimated start. Name the role types where demand exceeds supply.
@@ -106,13 +107,13 @@ Use today's date as the reference. Bucket each opportunity by its expected close
 ### Pipeline Forecast — [window]
 One line: [n] open opportunities · [total value] · [weighted value] weighted.
 
-**Forecast** — table: Month | Commit | Best case | Pipeline | Weighted | Avg REVI (value-weighted). Render it as a chart too if the client supports one.
+**Forecast** — table: Month | Commit | Best case | Pipeline | Weighted | Avg POV (value-weighted). Render it as a chart too if the client supports one.
 
 **By stage** — table: Stage | Count | Value | Weighted | Avg win %.
 
 **Can we deliver it?** — table: Role type | Needed (commit / best case) | Available | Gap. Follow it with one sentence on the biggest constraint.
 
-**REVI watch** — the 3 highest-REVI opportunities not yet in commit (pull forward) and the lowest-REVI ones in commit (at risk).
+**POV watch** — the 3 highest-POV opportunities not yet in commit (pull forward) and the lowest-POV ones in commit (at risk), each with why (`Pov.Alignments`, and its size against the ideal project).
 
 **Needs attention** — stale close dates, big early-stage deals near close, concentration risk. Name each opportunity.
 
@@ -122,8 +123,8 @@ Note that weighted values are only as good as the win probabilities in the recor
 
 ## The board
 
-Groups: **Focus Opportunities** (the top 5) · **Pull Forward** (high-REVI deals not yet in commit) · **At Risk**
-(low-REVI deals in commit) · **Needs Attention** (stale close dates, big early-stage deals near close). Opportunities
+Groups: **Focus Opportunities** (the top 5) · **Pull Forward** (high-POV deals not yet in commit) · **At Risk**
+(low-POV deals in commit) · **Needs Attention** (stale close dates, big early-stage deals near close). Opportunities
 only; note why each is there.
 
 ## Offer a board
